@@ -1,0 +1,102 @@
+@import "../vars";
+
+#wrap{
+  & > div{
+    clear: both;
+    .title{
+      float: left;
+      position: relative;
+      top: 14px;
+      width: 100px;
+    }
+    .inp{
+      float: left;
+      .button{
+        margin-left: 20px;
+        padding: 3px 20px;
+      }
+      select{
+        margin: 10px 0 0 20px;
+        padding: 3px;
+        height: 30px;
+      }
+    }
+  }
+  #pre_text{
+    margin-top: 20px;
+  }
+  table{
+    margin: 20px 0;
+    thead{
+      background-color: @main_color;
+      th {
+        color: #fff;
+        text-align: center;
+        vertical-align: middle;
+      }
+    }
+    tr{
+      cursor: pointer;
+      &:nth-child(2n){
+        background-color: rgba(36, 139, 247, 0.23);
+      }
+    }
+  }
+
+}
+.button.active{
+  background-color: @light_color;
+  text-decoration: none;
+}
+#loading{
+  text-align: center;
+  display: none;
+}
+
+#view_dip{
+  background-color: #cffebf;
+  color: #005826;
+  border: 1px solid #8fe573;
+  position: relative;
+  text-align: center;
+  .border-radius(10px);
+  padding: 5px 20px;
+  max-width: 400px;
+  width: 90%;
+  height: 120px;
+  div{
+    margin-bottom: 20px;
+  }
+  input[type=button]{
+    color: #fff;
+    background-color: @main_color;
+    cursor: pointer;
+    &:hover{
+      background-color: @light_color;
+    }
+  }
+}
+
+
+@media screen and(max-width: 768px) {
+  #wrap{
+    & > div{
+      margin-bottom: 15px;
+      .title{
+        float: none;
+        position: static;
+      }
+      .inp{
+        float: none;
+        input, select{
+          margin: 3px 0 !important;
+          width: 100%;
+        }
+
+      }
+    }
+    table{
+      width: 100%;
+    }
+  }
+}

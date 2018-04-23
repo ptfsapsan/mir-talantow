@@ -1,0 +1,125 @@
+.can-toggle {
+  position: relative;
+}
+.can-toggle *,
+.can-toggle *:before,
+.can-toggle *:after {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+}
+.can-toggle input[type="checkbox"] {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.can-toggle input[type="checkbox"][disabled] ~ label {
+  pointer-events: none;
+  color: #9d9d9d;
+}
+.can-toggle input[type="checkbox"][disabled] ~ label.toggle-switch {
+  opacity: 0.4;
+}
+.can-toggle input[type="checkbox"]:checked ~ label .toggle-switch:after {
+  content: attr(data-checked);
+  -webkit-transform: translate3d(38px, 0, 0);
+  transform: translate3d(38px, 0, 0);
+}
+.can-toggle input[type="checkbox"]:checked ~ label .toggle-switch:before {
+  content: attr(data-unchecked);
+  left: 0;
+}
+.can-toggle input[type="checkbox"]:focus ~ label .toggle-switch,
+.can-toggle input[type="checkbox"]:hover ~ label .toggle-switch {
+  background-color: #6a6a6a;
+}
+.can-toggle input[type="checkbox"]:focus ~ label .toggle-switch:after,
+.can-toggle input[type="checkbox"]:hover ~ label .toggle-switch:after {
+  color: #6a6a6a;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4);
+}
+.can-toggle input[type="checkbox"]:hover ~ label {
+  color: #6a6a6a;
+}
+.can-toggle input[type="checkbox"]:checked ~ label:hover {
+  color: #5194e3;
+}
+.can-toggle input[type="checkbox"]:checked ~ label .toggle-switch {
+  background-color: #67a2e6;
+}
+.can-toggle input[type="checkbox"]:checked ~ label .toggle-switch :after {
+  color: #19559B;
+}
+.can-toggle input[type="checkbox"]:checked:focus ~ label .toggle-switch,
+.can-toggle input[type="checkbox"]:checked:hover ~ label .toggle-switch {
+  background-color: #3b87df;
+}
+.can-toggle input[type="checkbox"]:checked:focus ~ label .toggle-switch:after,
+.can-toggle input[type="checkbox"]:checked:hover ~ label .toggle-switch:after {
+  color: #19559B;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4);
+}
+.can-toggle label {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+.can-toggle label .toggle-switch {
+  position: relative;
+  height: 20px;
+  -webkit-flex: 0 0 80px;
+  -ms-flex: 0 0 80px;
+  flex: 0 0 80px;
+  border-radius: 4px;
+  -webkit-transition: background-color 0.3s cubic-bezier(0, 1, 0.5, 1);
+  transition: background-color 0.3s cubic-bezier(0, 1, 0.5, 1);
+  background: #6a6a6a;
+  cursor: pointer;
+}
+.can-toggle label .toggle-switch:before {
+  content: attr(data-checked);
+  position: absolute;
+  top: 0;
+  text-transform: uppercase;
+  text-align: center;
+  left: 40px;
+  font-size: 10px;
+  line-height: 20px;
+  width: 40px;
+  padding: 0 10px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.can-toggle label .toggle-switch:after {
+  content: attr(data-unchecked);
+  position: absolute;
+  z-index: 5;
+  text-transform: uppercase;
+  text-align: center;
+  background: white;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  top: 2px;
+  left: 2px;
+  border-radius: 2px;
+  width: 38px;
+  line-height: 16px;
+  font-size: 10px;
+  -webkit-transition: -webkit-transform 0.3s cubic-bezier(0, 1, 0.5, 1);
+  transition: transform 0.3s cubic-bezier(0, 1, 0.5, 1);
+  color: #b7b7b7;
+}
+.can-toggle label .toggle-switch:hover:after {
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4);
+}
+/*# sourceMappingURL=checkbox-button.css.map */

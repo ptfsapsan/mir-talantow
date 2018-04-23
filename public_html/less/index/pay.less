@@ -1,0 +1,118 @@
+@import "../vars";
+
+#wrap{
+  .group{
+    padding: 10px;
+    border: 1px solid #2c88c9;
+    clear: both;
+    margin-bottom: 10px;
+  }
+}
+
+#wm-container{
+  padding-bottom: 20px;
+  margin-left: 10px;
+  .wmwidget {
+    background: #e5f3fc none repeat scroll 0 0;
+    border: 2px solid #2c88c9;
+    .border-radius(10px);
+    box-shadow: 0 0 0 2px #e5f3fc;
+    font: 14px Arial;
+    height: 160px;
+    padding: 20px 15px 10px;
+    position: relative;
+    width: 400px;
+    .wmwidget-sum {
+      .background_file('wm_head.png');
+      color: #fff;
+      height: 42px;
+      left: -10px;
+      position: absolute;
+      text-align: right;
+      top: 8px;
+      width: 450px;
+      span {
+        display: block;
+        font-size: 1.6em;
+        height: 40px;
+        padding: 5px 16px 0 0;
+      }
+    }
+    .wmwidget-title {
+      color: #2c88c9;
+      font-size: 1.3em;
+      margin: 34px 0 10px;
+    }
+    form{
+      & > div > div{
+        margin: 3px 0;
+      }
+      input[type=text], input[type=email]{
+        border: 1px solid #2c88c9;
+        margin-bottom: 8px;
+        width: 100%;
+        padding: 2px 0 0 5px;
+      }
+      .button{
+        padding: 2px 15px;
+      }
+    }
+    & *{
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+.money-req{
+  font-size: 26px;
+  color: #2c88c9;
+  margin-top: 20px;
+  div {
+    float: left;
+    &:first-child {
+      width: 200px;
+      height: 60px;
+      clear: both;
+      margin-right: 30px;
+      position: relative;
+      top: -17px;
+    }
+  }
+  #money_sb{
+    .background_file('icons/sb.png');
+  }
+  #money_yd{
+    .background_file('icons/yd.png');
+  }
+  #money_wm{
+    .background_file('icons/wm.png');
+  }
+}
+#ver_div{
+  #ver_result{
+    color: #f00;
+  }
+  & > div{
+    margin-bottom: 10px;
+    & > div:first-child {
+      color: #aaa;
+    }
+  }
+}
+
+@media screen and(max-width: 768px) {
+  #wm-container {
+    .wmwidget {
+      width: ~"calc(100% - 43px)";
+      .wmwidget-sum{
+        width: ~"calc(100% - -11px)";
+      }
+    }
+  }
+  .money-req div {
+    float: none;
+    &:first-child{
+      top:0;
+    }
+  }
+}

@@ -1,0 +1,49 @@
+@main_color: #1199dd;
+@light_color: lighten(@main_color, 20%);
+@grey_color: #ededed;
+
+@img: '/images/';
+
+// ширина вертикальной полоски
+@vert_width: 150px;
+
+.border-radius(@radius){
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+  border-radius: @radius;
+}
+
+.border(){
+  border: @main_color 1px solid;
+}
+
+.background_file(@file, @w: 100%, @h: 100%){
+  background: rgba(0, 0, 0, 0) url('@{img}@{file}') no-repeat scroll 0 0;
+  background-size: @w @h;
+}
+
+@font-face {
+  font-family: Monotype_Corsiva;
+  src: url('../fonts/Monotype_Corsiva.eot');
+  src: url('../fonts/Monotype_Corsiva.eot?iefix') format('eot'),
+  url('../fonts/Monotype_Corsiva.woff') format('woff'),
+  url('../fonts/Monotype_Corsiva.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Aksent_Normal;
+  src: url("../fonts/Aksent_Normal.ttf");
+  src: url("../fonts/Aksent_Normal.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: ALGER;
+  src: url("../fonts/ALGER.TTF");
+  src: url("../fonts/ALGER.TTF") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}

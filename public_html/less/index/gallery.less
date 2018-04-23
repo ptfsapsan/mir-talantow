@@ -1,0 +1,71 @@
+@import "../vars";
+
+#wrap {
+  & > div {
+    clear: both;
+    .title {
+      float: left;
+      position: relative;
+      top: 14px;
+      width: 100px;
+    }
+    .inp {
+      float: left;
+      .button {
+        margin-left: 20px;
+        padding: 3px 20px;
+      }
+      select {
+        margin: 10px 0 0 20px;
+        padding: 3px;
+        height: 30px;
+      }
+    }
+  }
+}
+.button.active{
+  background-color: @light_color;
+}
+#loading{
+  text-align: center;
+  display: none;
+}
+#gallery_field{
+  margin: 20px 0;
+  & > div{
+    background-color: rgba(26, 154, 255, 0.23);
+    .border();
+    .border-radius(0);
+    height: 130px;
+    padding: 7px 7px 20px;
+    width: 130px;
+    float: left;
+    margin: 3px;
+    cursor: pointer;
+    a img{
+      display: block;
+      margin: 0 auto;
+      vertical-align: middle;
+    }
+  }
+}
+
+@media screen and(max-width: 768px) {
+  #wrap{
+    & > div{
+      margin-bottom: 15px;
+      .title{
+        float: none;
+        position: static;
+      }
+      .inp{
+        float: none;
+        input, select{
+          margin: 3px 0 !important;
+          width: 100%;
+        }
+
+      }
+    }
+  }
+}

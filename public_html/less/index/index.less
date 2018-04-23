@@ -1,0 +1,50 @@
+@import "../vars";
+
+.ex_dip{
+  text-align: center;
+}
+#wrap{
+  h2{
+    margin: 15px 0 18px;
+  }
+  ul{
+    text-indent: 5px;
+    list-style: circle;
+    margin-left: 30px;
+  }
+  .sq_blocks{
+    background-color: #CAE8FF;
+    .border-radius(5px);
+    text-align: left;
+    .border();
+    width: ~"calc((100% - 70px) / 3)";
+    float: left;
+    padding: 10px 5px;
+    margin-right: 10px;
+    ul{
+      list-style: none;
+      margin-left: 0;
+    }
+    .sqb_h{
+      font-weight: bold;
+      text-align: center;
+      color: @main_color;
+    }
+    .plus, .minus{
+      height: 20px;
+      width: 20px;
+      margin: 0 2px;
+      position: relative;
+      top: 5px;
+    }
+  }
+}
+
+@media screen and(max-width: 768px){
+  #wrap{
+    .sq_blocks{
+      width: ~"calc(100% - 10px)";
+      margin-bottom: 10px;
+    }
+  }
+}

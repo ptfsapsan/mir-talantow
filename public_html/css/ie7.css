@@ -1,0 +1,4 @@
+.widget-upcoming h5 a{
+    left:0; /* IE7 fix. This Stupid WEB Browser for no reason adds Extra space from both sides!*/
+    right:0;
+}

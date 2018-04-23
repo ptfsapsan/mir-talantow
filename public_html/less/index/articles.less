@@ -1,0 +1,136 @@
+@import "../vars";
+
+#home{
+  #left_col{
+    width: @vert_width !important;
+    ul li:first-child{
+      text-align: center;
+      a{
+        text-transform: uppercase;
+        padding: 25px 10px;
+      }
+    }
+  }
+  #wrap{
+    padding-left: (@vert_width + 10) !important;
+    #nom_select{
+      display: none;
+    }
+    form{
+      label{
+        color: #888;
+        span{
+          font-size: 12px;
+          display: block;
+        }
+        &[for=original]{
+          display: inline;
+          position: relative;
+          top: 16px;
+        }
+      }
+      #original{
+        margin-top: 20px;
+      }
+      #orig-text {
+        color: #e409a8;
+        margin: 6px 0;
+      }
+      #or{
+        display: inline-table;
+        padding-left: 8px;
+        position: relative;
+        top: 23px;
+      }
+      .g-recaptcha{
+        margin: 15px 0 10px;
+      }
+      input[name=submit]{
+        width: 100%;
+        margin-bottom: 30px;
+      }
+
+    }
+    #comments{
+      .comm_name{
+        color: #ccc;
+        margin-top: 10px;
+      }
+      .comm_text{
+        text-indent: 20px;
+      }
+    }
+  }
+  .blanks{
+    opacity: 0.2;
+    margin: 10px;
+    float: left;
+    cursor: pointer;
+    &.active, &:hover{
+      opacity: 1;
+    }
+  }
+  .centre{
+    text-align: center;
+    margin: 15px 0 10px;
+  }
+  .hr{
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #ccc;
+    border-image: none;
+    border-style: none none solid;
+    border-width: medium 1px 1px;
+    width: 90%;
+  }
+  .end_article{
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-image: none;
+    border-style: none none solid;
+    border-width: medium 3px 3px;
+    width: 90%;
+    border-color: @main_color;
+    margin: 25px auto;
+  }
+  #theme_select{
+    display: none;
+  }
+
+}
+
+@media screen and(max-width: 768px){
+  #home{
+    #left_col{
+      width: 5px !important;
+      h3, ul{
+        display: none;
+      }
+    }
+    #wrap{
+      padding: 60px 15px 15px !important;
+      #theme_select{
+        background-color: @main_color;
+        border-bottom: 5px solid @main_color;
+        display: block;
+        left: 5px;
+        margin: 0;
+        position: fixed;
+        top: 60px;
+        width: 100%;
+        select{
+          width: ~"calc(100% - 10px)";
+          padding-top: 13px;
+        }
+      }
+      #or{
+        font-size: 10px;
+      }
+    }
+  }
+  
+}
