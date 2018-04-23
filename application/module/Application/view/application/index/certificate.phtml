@@ -1,0 +1,55 @@
+<?
+$this->inlineScript()
+   ->appendFile('//yastatic.net/es5-shims/0.0.2/es5-shims.min.js')
+   ->appendFile('//yastatic.net/share2/share.js')
+;
+$this->headTitle('сертификат');
+$this->headMeta()->appendName('robots', 'noindex, nofollow');
+
+
+$code = $this->code;
+$article = $this->article;
+$domain = $this->serverUrl();
+?>
+
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <div>
+         <h1>Сертификат</h1>
+         <p>
+            Ваша статья доступна по ссылке:
+            <? $link = $domain.$this->url('article',
+               ['theme' => $article['theme_trans'], 'id' => $article['id']]);?>
+            <a href="<?=$link?>" target="_blank">
+               <?=$link?>
+            </a>
+
+         </p>
+         <p>
+            Вы можете поделиться своим сертификатом в социальных
+            сетях, для этого просто нажмите на кнопку соответствующего ресурса.
+         </p>
+         <div class="ya-share2" data-lang="ru" data-size="m"
+           data-services="vkontakte,facebook,odnoklassniki,moimir,gplus,viber,whatsapp"
+              data-title='Сертификат о публикации статьи'></div>
+         <p>
+            Если Вы хотите сохранить сертификат на своем компьютере перейдите по
+            <a href="<?=$this->url('index-certificate', ['code' => $code],
+               ['query' => ['act' => 'save']])?>">
+               ССЫЛКЕ
+            </a>.
+         </p>
+      </div>
+      <div id="diplom_div">
+         <a href="<?=$this->url('index-certificate', ['code' => $code],
+            ['query' => ['act' => 'save']])?>">
+            <img src="<?=$this->url('ajax-certificate', ['code' => $code])?>"
+                 alt="Сертификат" style="width: 100%;">
+         </a>
+      </div>
+
+   </div>
+</div>

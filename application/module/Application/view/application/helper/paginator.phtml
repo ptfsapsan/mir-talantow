@@ -1,0 +1,49 @@
+<? 
+$page = $this->page;
+$pages = $this->pages;
+$page = $page < 1? 1: ($page > $pages? $pages: $page);
+if($on_page < 1){
+   $on_page = 1;
+}
+$begin = $page > 3? $page - 2: 1;
+$end = ($pages - $page) > 2? $page + 2: $pages;
+?>
+
+<div class="pagination">
+   <ul>
+      <? if($begin != 1){ ?>
+         <li>
+            <a href="<?=$this->url(null, [],
+               ['query' => ['act' => 'ch_page', 'page' => 1]], true)?>">
+               1
+            </a>
+         </li>
+         <? if($begin > 2) echo '<li> ... </li>';?>
+      <? } ?>
+      <? foreach(range($begin, $end) as $i){
+         if($page != $i){
+            ?>
+            <li>
+               <a href="<?=$this->url(null, [],
+                  ['query' => ['act' => 'ch_page', 'page' => $i]], true
+               )?>">
+                  <?=$i?>
+               </a>
+            </li>
+         <? }
+         else{
+            ?>
+            <li class="active"><span><?=$i?></span></li>
+         <? } ?>
+      <? }
+      if($end != $pages){
+         if($end < $pages - 1) echo '<li> ... </li>';?>
+         <li>
+            <a href="<?=$this->url(null, [],
+               ['query' => ['act' => 'ch_page', 'page' => $pages]], true)?>">
+               <?=$pages?>
+            </a>
+         </li>
+      <? } ?>
+   </ul>
+</div>

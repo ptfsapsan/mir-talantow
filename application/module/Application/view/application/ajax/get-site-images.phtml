@@ -1,0 +1,21 @@
+<?
+function clear($content){
+   return preg_replace('/[\r\n\s]+|<!--[^>]*?-->/s', ' ', $content);
+}
+
+ob_start('clear');
+
+
+if(count($this->images)) foreach($this->images as $img){?>
+   <div>
+      <? $dir = '/files/sites/'.$img['user_id'].'/';?>
+      <img src="<?=$this->basePath($dir.(empty($img['thumb'])?
+            $img['name']: $img['thumb']))?>" alt="" title="">
+      <a href="?act=del_img&id=<?=$img['id']?>">
+      <img class="del_file" src="<?=$this->basePath('images/delete-icon.png')?>"
+      alt="Удалить"  title="Удалить" data-id="<?=$img['id']?>">
+      </a>
+   </div>
+<? }
+
+ob_end_flush();

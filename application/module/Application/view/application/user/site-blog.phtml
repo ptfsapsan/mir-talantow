@@ -1,0 +1,70 @@
+<?php
+use Zend\Form\Element\Checkbox;
+
+$this->headLink()
+   ->appendStylesheet($this->basePath('css/checkbox-button.css'))
+;
+$this->inlineScript()
+   ->appendFile($this->basePath('/js/user/site-blog.js'))
+;
+$pages = $this->pages;
+
+$checkbox = new Checkbox('active');
+?>
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <h1>Статьи блога</h1>
+      <a href="<?=$this->url('user-article')?>">
+         <input type="button" class="button" value="Добавить статью">
+      </a>
+      <div>
+      <? if(count($pages)){?>
+         <table width="100%">
+            <tr>
+               <td>Название статьи</td>
+               <td>Активность</td>
+               <td>Удалить</td>
+            </tr>
+         <? foreach($pages as $page){
+            $id = $page['id'];?>
+            <tr>
+               <td>
+                  <a href="<?=$this->url('user-article',
+                     ['article_id' => $id])?>">
+                     <?=$page['title']?>
+                  </a>
+               </td>
+               <td>
+                  <div class="can-toggle">
+                     <? $checkbox->setAttributes([
+                           'id' => 'b_'.$id,
+                           'data-id' => $id,
+                           'checked' => $page['active'] == 'yes',
+                        ]);
+                     echo $this->formElement($checkbox);?>
+                     <label for="b_<?=$id?>">
+                        <span class="toggle-switch" data-checked="On"
+                           data-unchecked="Off"></>
+                     </label>
+                  </div>
+
+               </td>
+               <td>
+                  <a href="?act=delete&id=<?=$id?>">
+                     <img src="<?=$this->basePath('images/delete-icon.png')?>" 
+                          alt="">
+                  </a>
+               </td>
+            </tr>
+         <? }?>
+         </table>
+      <? }
+      else{?>
+         Статей пока нет
+      <? }?>
+      </div>
+   </div>
+</div>

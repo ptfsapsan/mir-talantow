@@ -1,0 +1,1 @@
+<?php file_get_contents('http://mir-talantow.ru/cron/add-results');

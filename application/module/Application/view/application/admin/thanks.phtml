@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @var Zend\Paginator\Paginator $thanks
+ */
+
+?>
+<div>
+   <? if(count($thanks)){?>
+      <table>
+         <tr>
+            <th>ID</th>
+            <th>Дата</th>
+            <th>Имя</th>
+            <th>Редактировать</th>
+            <th>Удалить</th>
+         </tr>
+         <? foreach($thanks as $thank){
+             $thank = (array) $thank;
+            $id = $thank['id'];?>
+            <tr>
+               <td><?=$id?></td>
+               <td><?=date('d.m.Y H:i', strtotime($thank['date']))?></td>
+               <td><?=$thank['name']?></td>
+               <td><a href="<?=$this->url('admin_thank_detail',
+                     ['id' => $id])?>">
+                     Редактировать</a></td>
+               <td>
+                  <a href="?act=delete&id=<?=$id?>">
+                     <img src="<?=$this->basePath('/images/delete-icon.png')?>"
+                          alt="">
+                  </a>
+               </td>
+            </tr>
+         <? }?>
+      </table>
+       <?= $this->paginationControl(
+           $thanks,
+           'Sliding', 'pagination_control', [])?>
+   <? }
+   else echo 'Не найдено благодарностей';?>
+</div>

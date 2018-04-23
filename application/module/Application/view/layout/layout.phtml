@@ -1,0 +1,186 @@
+<?php
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
+
+
+function clear($content){
+   $content = preg_replace('/[\r\n\s]+|<!--[^>]*?-->/s', ' ', $content);
+//   header('content-encoding: gzip');
+//   header('vary: accept-encoding');
+//   header('content-length: ' . strlen($content));
+//   $content = gzencode($content);
+   return $content;
+}
+
+ob_start('clear');
+
+
+
+$url = $this->url(null, [], [], true);
+$domain = $this->serverUrl();
+$config = $this->config;
+
+echo $this->doctype(); ?> 
+   <html lang="ru" itemscope="" itemtype="http://schema.org/WebPage">
+   <head>
+      <?=$this->headMeta()
+         ->prependHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
+         ->appendName(
+            'viewport', 'width=device-width, initial-scale=1, maximum-scale=1'
+         )
+         ->appendName(
+            'google-site-verification', 'BS4OMJHxstVJ_nDnbdP6ZDstLAnITexPcJAQ3hw40TE'
+         )
+         ->appendName(
+            'msvalidate.01', '880E237394F3B8B9176CC832C1B2A592'
+         )
+         ->appendName('yandex-verification', '8f55c0a47f459f20')
+         ->appendName('webmoney', 'CF2B74C9-AD92-4D6C-9220-E66422096591')
+      ?>
+      <?= $this->headTitle(
+         'Всероссийские конкурсы для детей и педагогов Мир Талантов', 'PREPEND'
+      )
+         ->setSeparator(' - ')
+         ->setAutoEscape(false)
+      ?>
+
+      <!-- CSS -->
+      <?=$this->headLink(
+         [
+            'rel' => 'shortcut icon',
+            'href' => $this->basePath('/images/favicon.ico'),
+            'type' => 'image/x-icon',
+         ])
+         ->appendStylesheet($this->basePath('/less/layout.css'))
+      ;
+      ?>
+      <!-- Scripts -->
+      <?php $this->inlineScript()
+         ->prependFile($this->basePath('/js/main.js'), null, ['async' => 'true'])
+         ->prependFile($this->basePath('/js/jquery-1.11.1.min.js'))
+         ->appendScript(
+            '
+            {
+               "@context": "http://schema.org",
+               "@type": "Organization",
+               "url": "' . $domain . '",
+               "legalName": ' . $config['site_name'] . ',
+               "email": "info(at)mir-talantow.ru",
+               "areaServed": "RU",
+               "sameAs": ["' . implode('", "', $config['social']) . '"]
+            }', 'application/ld+json', ['noescape' => true]
+         )
+         ->appendScript(
+            '
+               {
+               "@context": "http://schema.org",
+               "@type": "Product",
+               "name": "Всероссийские конкурсы",
+               "image": "' . $domain . '/images/styles/Green-Blue/logo.png",
+               "description": "Всероссийские конкурсы для детей, их родителей и педагогов",
+               "offers": {
+                  "@type": "Offer",
+                  "priceCurrency": "RUR",
+                  "price": "50"
+               }
+            }', 'application/ld+json', ['noescape' => true]
+         ); ?>
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-5232629491159123",
+            enable_page_level_ads: true
+         });
+      </script>
+
+   </head>
+   <body>
+
+   <div id="messages_fon">
+      <?php
+         echo $this->flashMessenger()->render(
+            FlashMessenger::NAMESPACE_ERROR, ['alert', 'alert-danger']);
+         echo $this->flashMessenger()->render(
+            FlashMessenger::NAMESPACE_INFO, ['alert', 'alert-info']);
+         echo $this->flashMessenger()->render(
+            FlashMessenger::NAMESPACE_SUCCESS, ['alert', 'alert-success']);
+         echo $this->flashMessenger()->render(
+            FlashMessenger::NAMESPACE_WARNING, ['alert', 'alert-warning']);
+         echo $this->flashMessenger()->render(
+            FlashMessenger::NAMESPACE_DEFAULT, ['alert', 'alert-info']);
+      ?>
+      <img src="<?=$this->basePath('/images/close.png')?>" alt="">
+   </div>
+   <div>
+      <div id="main_menu">
+         <a href="<?= $this->url('home') ?>" title="Мир Талантов">
+            <div id="logo"></div>
+         </a>
+         <div id="top_title">
+            Всероссийский центр детского творчества
+            <h2>
+               <a href="<?= $this->url('home') ?>">
+                  <?= $config['site_name'] ?>
+               </a>
+            </h2>
+         </div>
+         <div id="menu_butt"></div>
+         <div id="main-navigation">
+            <?php
+            if($this->identity){
+               /** @var \Zend\View\Helper\Navigation\Menu $navigation */
+               $navigation = $this->navigation('navigation-user')->menu();
+               $settings = $this->settings;
+               if(empty($settings['blog']) || $settings['blog'] == 'no')
+                  $navigation->removePage(
+                     $navigation->findOneByLabel('Статьи блога'));
+               if(empty($settings['blog_comments']) ||
+                  $settings['blog_comments'] == 'no')
+                  $navigation->removePage(
+                     $navigation->findOneByLabel('Комментарии статей блога'));
+            }
+            else{
+               $navigation = $this->navigation('navigation-index')->menu();
+            }
+            echo $navigation->setPartial('application/menu'); ?>
+         </div>
+
+         <div id="copyright">© <?=date('Y')?> <?= $config['site_name'] ?></div>
+         <div id="conf">
+            <a href="<?= $this->url('conf') ?>">
+               Политика конфиденциальности
+            </a>
+         </div>
+
+         <div id="social">
+            <a href="<?= $config['social']['vkontakte'] ?>" target="_blank"
+               id="soc-vk" rel="nofollow"></a>
+            <a href="<?= $config['social']['odnoklassniki'] ?>"
+               target="_blank"  rel="nofollow"
+               id="soc-ok"></a>
+            <a href="<?= $config['social']['facebook'] ?>" id="soc-fb"
+               target="_blank" rel="nofollow"></a>
+            <a href="<?= $config['social']['instagram'] ?>" id="soc-in"
+               target="_blank"  rel="nofollow"></a>
+            <a href="mailto:<?= $config['email'] ?>" target="_blank"
+               id="soc-mail" rel="nofollow"></a>
+         </div>
+
+      </div>
+
+      <div id="content">
+
+         <?= $this->layout()->content ?>
+
+      </div>
+   </div>
+
+   <?= $this->inlineScript() ?>
+
+   <!-- Yandex.Metrika counter --> <script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter38396265 = new Ya.Metrika({ id:38396265, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/38396265" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
+
+   </body> 
+   </html>
+
+<?php ob_end_flush();
+
+?>

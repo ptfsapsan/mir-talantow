@@ -1,0 +1,54 @@
+<?php
+$this->headTitle('страница контактов');
+$this->headMeta()
+   ->appendName('keywords', 'Контакты Мир талантов конкурсы бесплатно')
+   ->appendName('description', 'Контакты Всероссийские центра детского 
+   творчества "Мир талантов"'
+   )
+   ->appendName('robots', 'index, follow');
+
+use Application\Model\Recaptcha;
+
+$this->inlineScript()
+   ->appendFile('//www.google.com/recaptcha/api.js')
+;
+$this->headLink()
+   ->appendStylesheet('/css/index/contacts.css');
+$email = $this->layout()->config['email'];
+?>
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <h1>Контакты</h1>
+      <p>
+         Если у Вас появилось желание связаться с администрацией сайта
+         заполните форму, расположенную внизу страницы или воспользуйтесь
+         следующими реквизитами:
+      </p>
+      <p>
+         Email: <a href="mailto:<?=$email?>">
+            <?=$email?>
+         </a>
+      </p>
+      <div class="widget widget-contact">
+         <h3 class="widget-title">Связаться с нами</h3>
+         <? $f = $this->form_contacts;
+         echo $this->form()->openTag($f);
+         foreach($f as $el){
+            if($el->getName() == 'submit'){
+               ?>
+               <div class="g-recaptcha"
+                    data-sitekey="<?=Recaptcha::KEY?>"></div>
+            <? } ?>
+            <div>
+               <label><?=$el->getLabel()?></label>
+               <?=$this->formElement($el)?>
+            </div>
+         <? } ?>
+         <?=$this->form()->closeTag();?>
+      </div>
+
+   </div>
+</div>

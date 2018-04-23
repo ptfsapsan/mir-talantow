@@ -1,0 +1,34 @@
+<?php
+$this->headTitle('страница контактов');
+$this->headMeta()
+   ->appendName('keywords', 'Контакты Мир талантов конкурсы бесплатно')
+   ->appendName('description', 'Контакты Всероссийские центра детского 
+   творчества "Мир талантов"'
+   )
+   ->appendName('robots', 'noindex, nofollow');
+
+use Application\Model\Recaptcha;
+
+$this->inlineScript()
+   ->appendFile('//www.google.com/recaptcha/api.js')
+;
+
+?>
+
+<h1>Связаться с владельцем сайта</h1>
+<div class="widget widget-contact">
+   <? $f = $this->form_contacts;
+   echo $this->form()->openTag($f);
+   foreach($f as $el){
+      if($el->getName() == 'submit'){
+         ?>
+         <div class="g-recaptcha"
+              data-sitekey="<?=Recaptcha::KEY?>"></div>
+      <? } ?>
+      <div>
+         <label><?=$el->getLabel()?></label>
+         <?=$this->formElement($el)?>
+      </div>
+   <? } ?>
+   <?=$this->form()->closeTag();?>
+</div>

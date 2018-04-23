@@ -1,0 +1,30 @@
+<nav>
+    <ul>
+        <li>
+            Администратор
+        </li>
+        <li>
+            <a href="javascript:">Меню</a>
+            <ul id="menu_cont">
+                <? foreach($this->container as $page){?>
+                    <li <?=$page->isActive()? 'class="active"': ''?>>
+                        <a href="javascript:">
+                            <?=$page->getLabel()?>
+                        </a>
+                        <? if(count($page)){?>
+                            <ul>
+                            <? foreach($page as $i){?>
+                                <li <?=$i->isActive()? 'class="active"': ''?>>
+                                    <a href="<?=$i->getHref()?>">
+                                        <?=$i->getLabel()?>
+                                    </a>
+                                </li>
+                            <? }?>
+                            </ul>
+                        <? }?>
+                    </li>
+                <? }?>
+            </ul>
+        </li>
+    </ul>
+</nav>

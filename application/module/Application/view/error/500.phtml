@@ -1,0 +1,107 @@
+<!-- begin error -->
+<div class="error">
+   <div class="error-code m-b-10">500 <i class="fa fa-warning"></i></div>
+   <div class="error-content">
+      <div class="error-message">Произошла ошибка</div>
+      <div class="error-desc m-b-20">
+         Мы знаем о проблеме. <br />
+         Наши специалисты в ближайшее время её устранят.
+      </div>
+      <div class="row">
+         <div class="col-md-2">
+            <a href="<?=$this->url('home')?>" class="btn btn-success">На
+               главную</a>
+         </div>
+      </div>
+         <div class="error-desc m-b-20">
+            <h2>Информация для отладки</h2>
+            <h3><?php echo $this->message ?></h3>
+
+            <?php if(isset($this->display_exceptions)
+               && $this->display_exceptions
+            ): ?>
+
+               <?php if(isset($this->exception)
+                  && $this->exception instanceof Exception
+               ): ?>
+                  <hr />
+                  <h3>Additional information:</h3>
+                  <h4><?php echo get_class($this->exception); ?></h4>
+                  <dl>
+                     <dd>
+                            <pre class="prettyprint linenums">
+                                <?php echo $this->exception->getFile() ?>:
+                               <?php echo $this->exception->getLine() ?>
+                            </pre>
+                     </dd>
+                     <dd>
+                            <pre class="prettyprint linenums">
+                                <?php echo $this->escapeHtml(
+                                   $this->exception->getMessage()
+                                ) ?>
+                            </pre>
+                     </dd>
+                     <dd>
+                        <pre
+                           class="prettyprint linenums">
+                           <?php echo $this->escapeHtml(
+                              $this->exception->getTraceAsString(
+                           )
+                           ) ?></pre>
+                     </dd>
+                  </dl>
+                  <?php
+                  $e = $this->exception->getPrevious();
+                  if($e) :
+                     ?>
+                     <hr />
+                        :
+                     <ul class="unstyled">
+                        <?php while($e) : ?>
+                           <li>
+                              <h3><?php echo get_class($e); ?></h3>
+                              <dl>
+                                 </dt>
+                                 <dd>
+                                    <pre class="prettyprint linenums">
+                                       <?php echo $e->getFile(
+                                       ) ?>:<?php echo $e->getLine() ?></pre>
+                                 </dd>
+                                    :
+                                 </dt>
+                                 <dd>
+                                    <pre
+                                       class="prettyprint linenums">
+                                       <?php echo $this->escapeHtml($e->getMessage(
+                                       )
+                                       ) ?></pre>
+                                 </dd>
+                                    ) ?>:
+                                 </dt>
+                                 <dd>
+                                    <pre
+                                       class="prettyprint linenums">
+                                       <?php echo $this->escapeHtml($e->getTraceAsString(
+                                       )
+                                       ) ?></pre>
+                                 </dd>
+                              </dl>
+                           </li>
+                           <?php
+                           $e = $e->getPrevious();
+                        endwhile;
+                        ?>
+                     </ul>
+                  <?php endif; ?>
+
+               <?php else: ?>
+
+                   
+
+               <?php endif ?>
+
+            <?php endif ?>
+         </div>
+   </div>
+</div>
+<!-- end error -->

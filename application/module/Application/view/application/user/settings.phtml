@@ -1,0 +1,15 @@
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <h1>Личные данные</h1>
+
+      <div>
+         <? $f = $this->form_personal;
+         echo $this->form()->openTag($f);
+         foreach($f as $el) echo $this->formRow($el);
+         echo $this->form()->closeTag();?>
+      </div>
+      
+   </div>
+</div>

@@ -1,0 +1,55 @@
+<?
+use Application\Model\Images;
+
+function clear($content){
+   return preg_replace('/[\r\n\s]+|<!--[^>]*?-->/s', ' ', $content);
+}
+
+ob_start('clear');
+
+
+if(count($this->files['data'])){
+   foreach($this->files['data'] as $item){
+      $is_img = strpos($item['mime_type'], 'image') !== false;
+      $link = $item['dir'].$item['thumb'];
+      if($item['result'] > 0){?>
+         <div>
+            <a href="<?=$this->url('work', ['order_code' =>
+                                               $item['order_code']])?>">
+            <? if($is_img){?>
+               <img src="<?=$this->basePath('/files'.$link)?>" alt="">
+            <? }
+            else{?>
+               <img src="<?=$this->basePath('/images/icons/'.
+                  Images::getIcon($item['name']))?>" alt="">
+            <? }?>
+            </a>
+         </div>
+      <? }
+      else{?>
+         <div>
+            <? if($is_img){?>
+               <a href="javascript:">
+                  <img src="<?=$this->basePath('/files'.$link)?>" alt="" 
+                       class="img_preview" title=""
+                       data-src="/files<?=$item['dir'].$item['name']?>"
+                       data-id="<?=$item['id']?>">
+               </a>
+            <? }
+            else{?>
+               <div>
+                  <a href="javascript:" data-id="<?= $item['id'] ?>"
+                     target="_blank" class="file_con">
+                     <img src="<?=$this->basePath('/images/icons/'. 
+                     Images::getIcon($item['name'])) ?>"
+                          alt="">
+                  </a>
+               </div>
+            <? } ?>
+         </div>
+      <? } ?>
+   <? } ?>
+<? }
+else echo 'end';
+
+ob_end_flush();

@@ -1,0 +1,24 @@
+<?=$this->doctype();?>
+<html>
+<head>
+   <?=$this->headMeta()
+      ->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
+      ->appendName('keywords', '')
+      ->appendName('description', '')
+      ->setName('viewport',
+         'width=device-width,minimum-scale=1,initial-scale=1'
+      )
+   .
+   $this->headTitle('');
+   ?>
+
+   <!-- CSS -->
+   <?=$this->headLink()
+      ->appendStylesheet('/css/error.css');?>
+</head>
+<body>
+<div id="cont_field">
+   <?=$this->layout()->content?>
+</div>
+</body>
+</html>

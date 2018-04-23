@@ -1,0 +1,54 @@
+<?php
+
+$this->headLink()
+   ->appendStylesheet($this->basePath('/css/admin/article.css'));
+$this->headScript()
+   ->appendFile($this->basePath('/js/tinymce/tinymce.min.js'))
+   ->appendFile($this->basePath('/js/tinymce/langs/ru.js'))
+   ->appendFile($this->basePath('/js/admin/article.js'))
+;
+
+$article = $this->article;
+?>
+
+
+
+<div>
+   <div>
+      Сертификат отправлен: <?=empty($article['send_date'])?
+         '<a href="?act=send">Отправить</a>': $article['send_date']?>
+   </div>
+   <div>
+      <? if(!empty($article['code'])){
+      $link = $this->url('ajax-certificate', ['code' => $article['code']]);?>
+      <a href="<?=$link?>">
+         <img src="<?=$link?>" style="width: 150px" />
+      </a>
+      <? }?>
+   </div>
+
+   <? $f = $this->form_article;?>
+   <?=$this->form()->openTag($f)?>
+   <? foreach($f as $el){
+      $name = $el->getName();
+      echo $this->formRow($el);
+      if($name == 'original'){?>
+         <div class="clear"></div>
+         <div>
+            <p class="centre">Выберите бланк сертификата</p>
+            <? $cur_id = $f->get('certificate_id')->getValue();
+            foreach($this->certificates as $certificate){
+               $id = $certificate['id'];?>
+               <div class="blanks<?=$id == $cur_id? ' active': ''?>"
+                    data-id="<?=$id?>">
+                  <img src="/images/certificates/<?=$certificate['thumb']?>"
+                       alt="бланк диплома">
+               </div>
+            <? }?>
+            <div class="clear"></div>
+         </div>
+      <? }
+   }?>
+
+   <?=$this->form()->closeTag()?>
+</div>

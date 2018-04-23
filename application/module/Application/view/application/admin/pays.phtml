@@ -1,0 +1,65 @@
+<?php
+use Zend\Form\Element\Select;
+use Application\Model\Pays;
+
+$this->headScript()
+   ->appendFile('/js/admin/pays.js')
+   ->appendFile('/js/cal/jscal2.js')
+   ->appendFile('/js/cal/lang/ru.js');
+$this->headLink()
+   ->appendStylesheet('/css/cal/jscal2.css')
+   ->appendStylesheet('/css/cal/border-radius.css')
+   ->appendStylesheet('/css/admin/pays.css')
+;
+
+?>
+
+<div>
+   <form method="get">
+      <input type="hidden" name="act" value="add">
+      Добавить платеж:
+      id заказа - <select name="order_id">
+         <? if(count($this->order_ids)) foreach($this->order_ids as $i){?>
+            <option value="<?=$i['id']?>" 
+                    data-price="<?=$i['price']?>"><?=$i['id']?></option>
+         <? }?>
+      </select>,
+      сумма - <input id="order_price" name="sum">,
+      способ оплаты - 
+      <? $select = new Select('pay_way');
+      $select->setValueOptions(Pays::getWays());
+      echo $this->formElement($select);
+      ?>,
+      дата - <input type="text" name="date" id="date" value="<?=
+         date('d.m.Y H:i')?>">
+      <input type="submit" value="Оплачено">
+   </form>
+</div>
+
+<div>
+   <? if(count($this->pays['data'])){?>
+   <table id="main-table">
+      <tr>
+         <th>ID заказа</th>
+         <th>Дата и время оплаты</th>
+         <th>Способ оплаты</th>
+         <th>Сумма</th>
+         <th>Удалить</th>
+      </tr>
+      <? foreach($this->pays['data'] as $pay){?>
+         <tr>
+            <td><?=$pay['order_id']?></td>
+            <td><?=date('d.m.Y H:i', strtotime($pay['date']))?></td>
+            <td><?=$pay['pay_way']? Pays::getWays()[$pay['pay_way']]:
+               'Не определено'?></td>
+            <td><?=$pay['sum']?></td>
+            <td><a href="?act=delete&id=<?=$pay['id']?>">
+                  <img src="/images/delete-icon.png" alt="">
+               </a></td>
+         </tr>
+      <? }?>
+   </table>
+   <? echo $this->paginatorWidget($this->pays);
+   }
+   else echo 'Не найдено ни одного платежа';?>
+</div>

@@ -1,0 +1,25 @@
+<?php
+$this->headLink()
+   ->appendStylesheet('/css/admin/article-comment-detail.css');
+
+$comment = $this->comment;
+?>
+
+<div>
+   <div>Дата: <?=date('d.m.Y H:i', strtotime($comment['date']))?></div>
+   <div>
+      Статья: <a href="<?=$this->url('admin-article',
+         ['id' => $comment['article_id']])?>">
+         <?=$comment['article_name']?>
+      </a>
+   </div>
+   <? $f = $this->form_comment;
+   echo $this->form()->openTag($f);
+   foreach($f as $el){
+      if($el->getName() == 'submit') continue;
+      echo $this->formRow($el);
+   }
+   echo $this->formElement($f->get('submit'));
+   echo $this->form()->closeTag();
+   ?>
+</div>

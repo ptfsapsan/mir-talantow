@@ -1,0 +1,33 @@
+Добавить бланк
+<form method="post" enctype="multipart/form-data">
+   <input type="hidden" name="act" value="add_blank">
+   <input type="file" name="file">
+   <input type="submit" value="Загрузить">
+</form>
+
+<table>
+   <tr>
+      <td>ID</td>
+      <td>Image</td>
+      <td>Количество заказов</td>
+      <td>Active</td>
+      <td>Delete</td>
+   </tr>
+   <? foreach($this->blanks as $blank){?>
+      <tr>
+         <td><?=$blank['id']?></td>
+         <td><img src="/images/blanks/<?=$blank['thumb']?>" alt=""></td>
+         <td><?=$blank['orders_count']?></td>
+         <td>
+            <a href="?act=ch_active&id=<?=$blank['id']?>">
+               <?=$blank['active'] == 'yes'? 'Активен': 'Не активен'?>
+            </a>
+         </td>
+         <td>
+            <a href="?act=del&id=<?=$blank['id']?>">
+               <img src="/images/delete-icon.png" alt="Удалить" title="Удалить">
+            </a>
+         </td>
+      </tr>
+   <? }?>
+</table>

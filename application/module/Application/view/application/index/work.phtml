@@ -1,0 +1,129 @@
+<?php
+use Application\Model\Images;
+
+$order = $this->order;
+$work_title = $this->escapeHtml($order['work_title'].' - '.$order['code']);
+$this->headTitle($work_title);
+$this->headMeta()
+   ->appendName('keywords', 'конкурсная работа '.$work_title)
+   ->appendName('description', 'конкурсная работа '.$work_title)
+   ->appendName('robots', 'index, follow');
+$this->headLink()
+   ->appendStylesheet($this->basePath('/css/index/work.css'));
+$this->inlineScript()
+   ->appendFile('//yastatic.net/es5-shims/0.0.2/es5-shims.min.js')
+   ->appendFile('//yastatic.net/share2/share.js')
+   ->appendFile($this->basePath('js/index/work.js'));
+?>
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <div id="or_title">
+         <p>Заявка № <?=$order['id']?></p>
+         <p>Название работы: <?=$order['work_title']?></p>
+      </div>
+      <div>
+         <div id="or_inf">
+            <div class="info_pl">
+               Результат: <span><?=$order['result'] < 4?
+                  $order['result'].' место': 'Дипломант'?></span>
+            </div>
+            <div class="info_pl">
+               Дата выдачи диплома:
+               <span><?=date('d.m.Y', strtotime($order['send_date']))?></span>
+            </div>
+            <? if(!empty($order['executor_name'])){ ?>
+               <div class="info_pl">
+                  Исполнитель: <span><?=$order['executor_name']?></span>
+               </div>
+            <? } ?>
+            <? if(!empty($order['organization_name'])){ ?>
+               <div class="info_pl">
+                  Учреждение: <span><?=$order['organization_name']?></span>
+               </div>
+            <? } ?>
+            <? if(!empty($order['organization_address'])){ ?>
+               <div class="info_pl">
+                  Адрес учреждения: <span><?=$order['organization_address']?></span>
+               </div>
+            <? } ?>
+            <? if(!empty($order['chief_name'])){ ?>
+               <div class="info_pl">
+                  Руководитель: <span><?=$order['chief_name']?></span>
+               </div>
+            <? } ?>
+            <? if(!empty($order['nomination_title'])){ ?>
+               <div class="info_pl">
+                  Номинация: <span><?=$order['nomination_title']?></span>
+               </div>
+            <? } ?>
+            <? if(!empty($order['theme_title'])){ ?>
+               <div class="info_pl">
+                  Тема конкурса: <span><?=$order['theme_title']?></span>
+               </div>
+            <? } ?>
+         </div>
+      </div>
+      <div id="or_con">
+         <? if(count($order['files'])){?>
+            <!--noindex-->
+            <div id="or_img">
+               <img id="big_img" src="">
+            </div>
+            <!--/noindex-->
+         <? }?>
+         <div id="or_conprev">
+                  <?
+                  if(count($order['links'])){
+                     ?>
+                     <? foreach($order['links'] as $link){ ?>
+                        <div class="thumb_img">
+                           <img src="<?=
+                              $this->basePath('/images/file-html.png')?>"
+                              alt="" data-type="link"
+                                data-link="<?=$link['link']?>">
+                        </div>
+                     <? } ?>
+                  <? }
+                  if(count($order['files'])){?>
+                     <!--noindex-->
+                     <? foreach($order['files'] as $file){
+                        $is_img = strpos($file['mime_type'], 'image') !== false;
+                        $dsrc = !$is_img?
+                           $this->basePath('/images/icons/'.
+                              Images::getIcon($file['name'])):
+                           $this->basePath('/files'.$file['dir']
+                              .$file['name']);
+                        $thumb_src = !$is_img?
+                           $this->basePath('/images/icons/'.
+                              Images::getIcon($file['name'])):
+                           $this->basePath('/files'.$file['dir']
+                              .$file['thumb']);
+                        ?>
+                        <div>
+                           <img class="thumb_img" src="<?=$thumb_src?>"
+                                data-src="<?=$dsrc?>"
+                                data-id="<?=$file['id']?>" data-type="file">
+                        </div>
+                     <? }?>
+                     <!--/noindex-->
+                  <? } ?>
+         </div>
+         <div id="or_load">
+            <? if(count($order['files'])){?>
+            <div class="button">
+               <a href="/load-file/0" id="load_but">Скачать</a>
+            </div>
+            <? }?>
+            <div id="share">
+               <div>Поделиться</div>
+               <div class="ya-share2"
+                    data-services="collections,vkontakte,facebook,odnoklassniki,moimir,gplus,twitter,viber,whatsapp,skype,telegram"></div>
+            </div>
+         </div>
+
+      </div>
+   </div>
+</div>

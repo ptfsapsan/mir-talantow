@@ -1,0 +1,61 @@
+<?php
+$this->headLink()
+   ->appendStylesheet($this->basePath('css/user/contest.css'))
+;
+$this->inlineScript()
+   ->appendFile($this->basePath('js/user/thank.js'))
+;
+
+?>
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <h1>Здесь вы можете оставить заявку на благодарность</h1>
+
+      <div id="order_form">
+         <? $f = $this->form_thank;?>
+         <?=$this->form()->openTag($f)?>
+
+         <p>
+            Для получения благодарности необходимо оплатить 100 рублей на
+            <a href="<?=$this->url('pay')?>">странице оплаты</a>.
+         </p>
+         <p>
+            Заполните данные заявки.
+         </p>
+
+         <div class="div-bor">
+            <? foreach($f as $el){
+               $type = $el->getAttribute('type');
+               if($type == 'hidden'){
+                  echo $this->formHidden($el);
+                  continue;
+               }
+               if(in_array($type, ['submit', 'checkbox'])){
+                  continue;
+               } ?>
+               <div class="f_label"><?=$el->getOption('label')?></div>
+               <div class="f_el"><?=$this->formElement($el)?></div>
+            <? }?>
+         </div>
+
+         <? // выбор бланка благодарности ?>
+         <div class="div-bor">
+            <p>Выберите бланк благодарности.</p>
+            <? foreach($this->blanks as $blank){ ?>
+               <div class="blanks" data-id="<?=$blank['id']?>">
+                  <img src="/images/blanks/<?=$blank['thumb']?>"
+                       alt="бланк благодарности">
+               </div>
+            <? } ?>
+            <div class="clear"></div>
+         </div>
+         <div>
+            <?=$this->formElement($f->get('submit'))?>
+         </div>
+         <?=$this->form()->closeTag()?>
+      </div>
+   </div>
+</div>

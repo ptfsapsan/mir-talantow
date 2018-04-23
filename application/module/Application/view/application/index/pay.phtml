@@ -1,0 +1,136 @@
+<?
+use Zend\Uri\Uri;
+
+$this->headTitle('оплата');
+$this->headMeta()
+   ->appendName(
+      'keywords', 'оплата организационный взнос конкурс диплом 
+   без регистрации для детей педагогов'
+   )
+   ->appendName(
+      'description', 'Оплата организационного взноса на 
+   участие в конкурсе для детей и педагогов'
+   )
+   ->appendName('robots', 'index, follow');
+
+
+$this->inlineScript()
+   ->appendFile('/js/index/pay.js');
+$this->headLink()
+   ->appendStylesheet('/css/index/pay.css');
+
+$order = $this->order;
+$debt = !$order? false: ($order['price'] - $order['paid'] <= 0? false:
+   number_format($order['price'] - $order['paid'], 2));
+?>
+
+<script>
+   var vars = {
+      debt: <?=$debt? $debt: 0?>
+   }
+</script>
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <div>
+         <h1>Оплата организационного взноса</h1>
+         <p>
+            Для участия в конкурсе сначала нужно <span class="red">
+               сформировать заявку</span> на участие в
+            <a href="<?= $this->url('kid') ?>">
+               Конкурсе для детей
+            </a> или
+            <a href="<?= $this->url('educator') ?>">
+               Конкурсе для педагогов</a>,
+            а далее оплатите Вашу заявку на этой странице. В одном
+            платеже можно оплатить любое количество заявок. Если номер
+            заявки автоматически вставился в текстовое поле, обязательно
+            проверьте его. В комментариях к платежу укажите номер заявки.
+         </p>
+
+         <div class="group">
+            <p>
+               Для оплаты можно воспользоваться виджетом Яндекс.Деньги. Здесь
+               можно оплатить с пластиковой карты, со счета мобильного телефона
+               или с Яндекс-кошелька.
+            </p>
+            <div>
+               <? $uri = new Uri('https://money.yandex.ru/embed/shop.xml');
+               $uri->setQuery([
+                  'account' => '41001868241081',
+                  'quickpay' => 'shop',
+                  'payment-type-choice' => 'on',
+                  'mobile-payment-type-choice' => 'on',
+                  'writer' => 'seller',
+                  'targets' => 'Оплата организационного взноса '.
+                     ($order? $order['id']: ''),
+                  'targets-hint' => '',
+                  'default-sum' => $order && $order['paid'] != $order['price']?
+                     $order['price']: '',
+                  'button-text' => '01',
+                  'mail' => 'on',
+                  'successURL' => $this->serverUrl(),
+               ]);
+               ?>
+               <iframe src="<?=$uri->toString()?>" frameborder="0"
+                       allowtransparency="true" scrolling="no"
+                       width="470" height="251"></iframe>
+            </div>
+         </div>
+
+         <div class="group">
+            <p>
+               Если Вы не хотите оплачивать через вышеприведенный виджет,
+               воспользуйтесь нашими реквизитами:
+            </p>
+            <div class="money-req">
+               <div id="money_yd"></div>
+               <div>41001868241081</div>
+            </div>
+            <div class="clear"></div>
+         </div>
+
+         <div class="group">
+            <p>
+               После оплаты желательно ответить на письмо, пришедшее Вам
+               после оформления заказа, и мы сразу проверим наличие оплаты.
+               В письме укажите способ оплаты.
+            </p>
+            <p>
+               Просим обратить внимание, что платежи обрабатываются вручную,
+               поэтому срок обработки платежа в дневное время 1 - 2 часа.
+            </p>
+         </div>
+
+         <div class="group">
+            <p>
+               Вы можете проверить наличие неоплаченной заявки и уточнить
+               величину организационного взноса. Для этого просто
+               введите номер заявки и адрес электронной почты, который вы
+               указали при создании заявки.
+            </p>
+            <div id="ver_div">
+               <div>
+                  <div>Номер заявки</div>
+                  <div><input type="text" id="order_id_ver"
+                              value="<?= $order? $order['id']: '' ?>"></div>
+               </div>
+               <div>
+                  <div>Адрес электронной почты</div>
+                  <div><input type="text" id="email_ver"
+                              value="<?= $order? $order['email']: '' ?>"></div>
+               </div>
+               <div id="ver_result"></div>
+               <div>
+                  <div>
+                     <input type="button" class="button" id="ver_order"
+                            value="Проверить"></div>
+                  <div id="ver_result"></div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

@@ -1,0 +1,65 @@
+<?
+use Zend\Form\Element\Checkbox;
+
+$this->headLink()
+   ->appendStylesheet($this->basePath('css/checkbox-button.css'))
+   ->appendStylesheet($this->basePath('css/admin/comments.css'))
+;
+$this->headScript()
+   ->appendFile($this->basePath('js/admin/comments.js'))
+;
+
+$c = $this->comments;
+$checkbox = new Checkbox('active');
+$checkbox->setCheckedValue('yes');
+$checkbox->setUncheckedValue('no');
+?>
+
+<script>
+//   jQuery(document).ready(function (){
+//      var $j = jQuery.noConflict();
+//      $j('.comment').on('blur', function (){
+//         var t = $j(this);
+//         location.href = '?act=ch_text&id=' + t.data('id') + '&text=' +
+//               t.val();
+//      })
+//   })
+</script>
+
+<? if(count($c['data'])){?>
+   <table>
+      <? foreach($c['data'] as $i){
+         $id = $i['id'];?>
+         <tr>
+            <td><?=$id?></td>
+            <td><?=date('d.m.Y', strtotime($i['date']))?></td>
+            <td><textarea class="comment" data-id="<?=$id?>"
+               title="" ><?=$i['text']?></textarea>
+            </td>
+            <td>
+               <div class="can-toggle">
+                  <? $checkbox->setValue($i['active']);
+                  $checkbox->setAttributes([
+                     'id' => 'active_'.$id,
+                     'data-id' => $id,
+                  ]);
+                  echo $this->formElement($checkbox);?>
+                  <label for="active_<?=$id?>">
+                        <span class="toggle-switch" data-checked="On"
+                              data-unchecked="Off"></>
+                  </label>
+               </div>
+            </td>
+            <td>
+               <a href="?act=del&id=<?=$id?>">
+                  <img src="<?=$this->basePath('images/delete-icon.png')?>"
+                  alt="">
+               </a>
+            </td>
+         </tr>
+      <? }?>
+
+   </table>
+   <?=$this->paginatorWidget($c)?>
+<? }
+else echo 'Не найдено комментариев';?>

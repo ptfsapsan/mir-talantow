@@ -1,0 +1,140 @@
+<?
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
+
+
+function clear($content){
+   return preg_replace('/[\r\n\s]+|<!--[^>]*?-->/s', ' ', $content);
+}
+
+ob_start('clear');
+
+$url = $this->url(null, [], [], true);
+$domain = $this->serverUrl();
+$config = $this->config;
+$site_images = $this->layout()->site_images;
+$settings = $this->layout()->settings;
+$user_id = $settings['user_id'];
+$site_code = $settings['site_code'];
+$color1 = '#'.$settings['color_1'];
+$color2 = '#'.$settings['color_2'];
+$user = $this->layout()->user;
+
+echo $this->doctype(); ?>
+   <html lang="ru">
+   <head>
+      <?=$this->headMeta()
+         ->prependHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
+         ->appendName(
+            'viewport', 'width=device-width, initial-scale=1, maximum-scale=1'
+         )
+      ?>
+      <?= $this->headTitle(
+         'педагог '.$user['name'], 'APPEND'
+      )
+         ->setSeparator(' - ')
+         ->setAutoEscape(false)
+      ?>
+
+      <!-- CSS -->
+      <?=$this->headLink(
+         [
+            'rel' => 'shortcut icon',
+            'href' => $this->basePath('/images/favicon.ico'),
+            'type' => 'image/x-icon',
+         ])
+         ->appendStylesheet($this->basePath('/less/site.css'))
+      ?>
+      <!-- Scripts -->
+      <? $this->inlineScript()
+         ->prependFile($this->basePath('/js/main.js'), null, ['async' => 'true'])
+         ->prependFile($this->basePath('/js/jquery-1.11.1.min.js'))
+         ->appendFile('//yastatic.net/es5-shims/0.0.2/es5-shims.min.js')
+         ->appendFile('//yastatic.net/share2/share.js')
+      ; ?>
+      <style type="text/css">
+         #left_col, #right_col{
+            background-color: <?=$color1?>;
+         }
+         .dd-menu a{
+            color: <?=$color2?>;
+         }
+      </style>
+
+   </head>
+   <body>
+
+   <div id="messages_fon">
+      <?
+         echo $this->flashMessenger()->render(
+            FlashMessenger::NAMESPACE_ERROR, ['alert', 'alert-danger']);
+         echo $this->flashMessenger()->render(
+            FlashMessenger::NAMESPACE_INFO, ['alert', 'alert-info']);
+         echo $this->flashMessenger()->render(
+            FlashMessenger::NAMESPACE_SUCCESS, ['alert', 'alert-success']);
+         echo $this->flashMessenger()->render(
+            FlashMessenger::NAMESPACE_WARNING, ['alert', 'alert-warning']);
+         echo $this->flashMessenger()->render(
+            FlashMessenger::NAMESPACE_DEFAULT, ['alert', 'alert-info']);
+      ?>
+      <img src="<?=$this->basePath('/images/close.png')?>" alt="">
+   </div>
+   <div>
+      <div id="main_menu">
+         <a href="<?= $this->url('site', ['site_code' => $site_code]) ?>"
+            title="Логотип">
+            <img src="<?=$this->basePath('files/sites/'.$user_id.'/'.
+               $site_images['logo'])?>" alt="">
+         </a>
+         <div id="top_title">
+            <h2>
+               <a href="<?= $this->url('site', ['site_code' => $site_code]) ?>">
+                  <?=$this->escapeHtml($settings['title'])?>
+               </a>
+            </h2>
+         </div>
+         <div id="menu_butt"></div>
+         <div id="main-navigation">
+            <?
+            $navigation = $this->navigation('navigation-site')->menu();
+            foreach($navigation->getPages() as $page){
+               $page->setParams(['site_code' => $site_code]);
+            }
+            $settings = $this->settings;
+            if($settings['blog'] == 'no')
+               $navigation->removePage(
+                  $navigation->findOneByLabel('Блог'));
+            if($settings['contacts'] == 'no')
+               $navigation->removePage(
+                  $navigation->findOneByLabel('Контакты'));
+            echo $navigation->setPartial('application/menu'); ?>
+         </div>
+         <div class="ya-share2"
+              data-services="collections,vkontakte,facebook,odnoklassniki,moimir,gplus,twitter,viber,whatsapp,skype,telegram"></div>
+
+      </div>
+
+      <div id="content">
+         <div id="home">
+            <div id="left_col"></div>
+            <div id="right_col"></div>
+            <div id="wrap">
+               <div id="wrapper">
+                  <div id="head_img">
+                     <img src="<?=$this->basePath('files/sites/'.$user_id.'/'
+                        .$site_images['head'])?>" alt="">
+                  </div>
+
+                  <?= $this->layout()->content ?>
+                  
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <?= $this->inlineScript() ?>
+
+   </body>
+   </html>
+
+<? ob_end_flush(); ?>

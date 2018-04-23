@@ -1,0 +1,241 @@
+<?
+
+use Zend\Form\Element\Select;
+use Application\Model\Repository\Orders as OrdersRepository;
+
+/**
+ * @var Zend\Db\Adapter\Driver\Pdo\Result $kid_nominations
+ * @var Zend\Db\Adapter\Driver\Pdo\Result $educator_nominations
+ * @var Zend\Db\Adapter\Driver\Pdo\Result $kid_themes
+ */
+
+
+$this->headScript()
+    ->appendFile('/js/cal/jscal2.js')
+    ->appendFile('/js/cal/lang/ru.js')
+    ->appendFile('/js/admin/orders.js');
+$this->headLink()
+    ->appendStylesheet('/css/cal/jscal2.css')
+    ->appendStylesheet('/css/cal/border-radius.css')
+    ->appendStylesheet('/css/admin/orders.css');
+
+$s = $this->session;
+$o = $this->orders;
+
+$types = OrdersRepository::getTypes();
+$kinds = OrdersRepository::getKinds();
+$places = OrdersRepository::getPlaces();
+
+$statuses = OrdersRepository::getStatuses();
+$select_status = new Select('status');
+$select_status->setValueOptions($statuses);
+
+$nominations = [];
+foreach ($educator_nominations as $item) {
+    $nominations[] = $item;
+}
+foreach ($kid_nominations as $item) {
+    $nominations[] = $item;
+}
+
+$themes = [];
+foreach ($kid_themes as $item) {
+    $themes[] = $item;
+}
+
+
+?>
+
+
+<div>
+    <div>Найдено <?= $o['count'] ?> заказов на сумму <?= $o['all_price'] ?>
+        рублей, из них оплачено <?= $o['all_paid'] ?> рублей.
+    </div>
+    <div>
+        <input type="text" id="from" readonly value="<?= $s->from ?>"
+               data-k="from" title=""> -
+        <input type="text" id="to" readonly value="<?= $s->to ?>" data-k="to"
+               title="">
+        <input type="text" id="search" value="<?= $s->search ?>"
+               placeholder="Поиск">
+    </div>
+    <div>
+        <? $select_type = new Select('type');
+        $select_type->setValueOptions([0 => 'Все типы'] + $types);
+        $select_type->setAttribute('id', 'type');
+        $select_type->setValue($s->type);
+        echo $this->formElement($select_type);
+
+        $select_kind = new Select('kind');
+        $select_kind->setValueOptions([0 => 'Все виды'] + $kinds);
+        $select_kind->setAttribute('id', 'kind');
+        $select_kind->setValue($s->kind);
+        echo $this->formElement($select_kind);
+
+        $select_nomination = new Select('nomination');
+        $select_nomination->setAttribute('id', 'nomination');
+        $values = [0 => 'Все номинации'] + array_column($nominations, 'title', 'id');
+        $select_nomination->setValueOptions($values);
+        $select_nomination->setValue($s->nomination);
+        echo $this->formElement($select_nomination);
+
+        $select_theme = new Select('theme');
+        $select_theme->setAttribute('id', 'theme');
+        $values = [0 => 'Все темы'] + array_column($themes, 'title', 'id');
+        $select_theme->setValueOptions($values);
+        $select_theme->setValue($s->theme);
+        echo $this->formElement($select_theme);
+
+        $select = clone $select_status;
+        $select->setValueOptions([0 => 'Все'] + $statuses)
+            ->setAttribute('id', 'status')
+            ->setValue($s->status);
+        echo $this->formElement($select);
+
+        // все дипломанты
+        if ($s->type == OrdersRepository::TYPE_KID && $s->nomination > 0 && $s->theme > 0 ||
+            $s->type == OrdersRepository::TYPE_EDUCATOR && $s->nomination > 0) {
+            ?>
+            <input type="button" value="Все дипломанты" id="all_dip">
+        <? } ?>
+
+
+    </div>
+    <div>
+        <div class="type1 place"></div>
+        - <?= $types[OrdersRepository::TYPE_KID] ?>,
+        <div class="type2 place"></div>
+        - <?= $types[OrdersRepository::TYPE_EDUCATOR] ?>
+    </div>
+    <div>
+        <div class="kind1 place"></div>
+        - <?= $kinds[OrdersRepository::KIND_MONTHLY] ?>,
+        <div class="kind2 place"></div>
+        - <?= $kinds[OrdersRepository::KIND_FAST] ?>,
+        <div class="kind3 place"></div>
+        - <?= $kinds[OrdersRepository::KIND_URGENT] ?>
+    </div>
+    <div>
+        <div class="place1 place"></div>
+        - <?= $places[OrdersRepository::PLACE_1] ?>,
+        <div class="place2 place"></div>
+        - <?= $places[OrdersRepository::PLACE_2] ?>,
+        <div class="place3 place"></div>
+        - <?= $places[OrdersRepository::PLACE_3] ?>,
+        <div class="place4 place"></div>
+        - <?= $places[OrdersRepository::PLACE_GRADUATE] ?>
+    </div>
+
+    <? if (count($o['data'])) { ?>
+        <table>
+            <? foreach ($o['data'] as $order) {
+                $id = $order['id'];
+                $fake = empty($order['email']); ?>
+                <tr>
+                    <td><?= $id ?></td>
+                    <td><?= date('d.m.Y H:i', strtotime($order['date'])) ?></td>
+                    <td>
+                        <div class="type<?= $order['type'] == OrdersRepository::TYPE_KID ? 1 : 2 ?>
+                  place"></div>
+                    </td>
+                    <td>
+                        <div class="kind<?= $order['kind'] == OrdersRepository::KIND_MONTHLY ? 1
+                            : ($order['kind'] == OrdersRepository::KIND_FAST ? 2 : 3) ?> place"></div>
+                    </td>
+                    <td><?= $order['price'] ?></td>
+                    <td><?= $order['paid'] ?></td>
+                    <td>
+                        <a href="?act=ch_session&p=nomination&v=<?= $order['nomination_id'] ?>">
+                            <?= $order['nomination_title'] ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="?act=ch_session&p=theme&v=<?=
+                        $order['theme_id'] ?>">
+                            <?= $order['theme_title'] ?>
+                        </a>
+                    </td>
+                    <td><?= $order['work_title'] ?></td>
+                    <td><?= $order['executor_age'] ?></td>
+                    <td>
+                        <a href="<?= $this->url('admin_client_detail',
+                            ['email' => $order['email']]) ?>">
+                            <?= $order['email'] ?>
+                        </a>
+                    </td>
+                    <td>
+                        <? if ($order['status'] == OrdersRepository::STATUS_PAID)
+                            foreach (range(1, 4) as $i) {
+                                ?>
+                                <a href="?act=ch_result&id=<?= $id ?>&result=<?= $i ?>">
+                                    <div class="place place<?= $order['result'] == $i ?
+                                        $i : 0 ?>"></div>
+                                </a>
+                            <? } ?>
+                    </td>
+                    <td>
+                        <? if ($fake) echo '';
+                        elseif ($order['status'] == OrdersRepository::STATUS_SENT) {
+                            echo date('d.m.Y H:i', strtotime($order['send_date']));
+                        } elseif ($order['result'] == 0) {
+                            ?>
+                            <a href="?act=ch_paid&id=<?= $id ?>">
+                                <?= $order['status'] == OrdersRepository::STATUS_PAID ? 'Оплачено' : 'Не оплачено' ?>
+                            </a>
+                        <? } else {
+                            ?>
+                            <a href="?act=send&id=<?= $id ?>">Отправить</a>
+                        <? } ?>
+                    </td>
+                    <td>
+                        <? if (count($order['files']))
+                            foreach ($order['files'] as $i) {
+                                if (strpos($i['mime_type'], 'image/') === false) {
+                                    ?>
+                                    <a href="<?= $this->url('file-content',
+                                        ['id' => $i['id']]) ?>">
+                                        <?= $i['name'] ?>
+                                    </a>
+                                <? } else {
+                                    ?>
+                                    <a href="javascript:" class="imgs"
+                                       data-src="/files<?= $i['dir'] . $i['name'] ?>">
+                                        <?= $i['name'] ?>
+                                    </a>
+                                <? } ?>
+                            <? }
+                        if (count($order['links'])) {
+                            foreach ($order['links'] as $link) {
+                                ?>
+                                <a href="<?= $link['link'] ?>" target="_blank">линк</a>
+                            <? }
+                        } ?>
+                    </td>
+                    <td>
+                        <? if (!$fake) { ?>
+                            <a href="/admin/order-detail/<?= $id ?>">
+                                Просмотр
+                            </a>
+                        <? } ?>
+                    </td>
+                    <td>
+                        <? if (!$fake) {
+                            $select = clone $select_status;
+                            $select->setValue($order['status'])
+                                ->setAttributes([
+                                        'data-id' => $order['id'],
+                                        'class' => 'ch_stat',
+                                    ]
+                                );
+                            echo $this->formElement($select);
+                        } ?>
+                    </td>
+                </tr>
+            <? } ?>
+        </table>
+        <? echo $this->paginatorWidget($o);
+    } else {
+        ?>
+        Не найдено ни одного заказа
+    <? } ?>
+</div>

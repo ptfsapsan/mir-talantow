@@ -1,0 +1,50 @@
+<?
+$this->headTitle('образцы дипломов');
+$this->headMeta()
+   ->appendName('keywords', 'образцы конкурс диплом без регистрации для детей
+      педагогов бесплатно')
+   ->appendName('description', 'Образцы дипломов Всероссийского центра детского 
+   творчества Мир Талантов')
+   ->appendName('robots', 'index, follow');
+;
+$this->headLink()
+   ->appendStylesheet('/css/index/diploms.css')
+;
+?>
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <h1>Образцы дипломов и сертификатов</h1>
+      <p>
+         Дипломы и сертификаты создаются в высоком разрешении (2480 х 3500
+         пикселей). Участник конкурса сам выбирает понравившийся ему шаблон 
+         для своего диплома или сертификата.
+      </p>
+      <h3>Шаблоны дипломов и сертификатов</h3>
+      <div class="div-bor">
+         <? foreach($this->blanks as $blank){ ?>
+            <div class="blanks" data-id="<?=$blank['id']?>">
+               <img src="/images/blanks/<?=$blank['thumb']?>"
+                    alt="бланк диплома">
+            </div>
+         <? } ?>
+         <div class="clear"></div>
+      </div>
+      <h3 class="title">Образец диплома участника конкурса для детей</h3>
+      <a href="<?=$this->url('kid')?>">
+         <img src="/images/diplom2.png" alt="Образец диплома">
+      </a>
+
+      <h3 class="title">Образец диплома участника конкурса для педагогов</h3>
+      <a href="<?=$this->url('educator')?>">
+         <img src="/images/diplom1.png" alt="Образец диплома">
+      </a>
+
+      <h3 class="title">Образец сертификата о публикации статьи</h3>
+      <a href="<?=$this->url('articles')?>">
+         <img src="/images/certificate.png" alt="Образец сертификата">
+      </a>
+   </div>
+</div>

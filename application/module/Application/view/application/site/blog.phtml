@@ -1,0 +1,19 @@
+
+<h1>Статьи блога</h1>
+
+<div id="cont">
+   <? if(count($this->articles)){
+      foreach($this->articles as $article){?>
+         <p>
+            <a href="<?=$this->url('site-article',
+               ['id' => $article['id']], [], true)?>">
+               <?=$article['title']?>
+            </a>
+         </p>
+      <? }?>
+      
+   <? }
+   else{?>
+      <p>Пока статей нет</p>
+   <? }?>
+</div>

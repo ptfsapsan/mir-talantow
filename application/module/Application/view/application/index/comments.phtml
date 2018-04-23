@@ -1,0 +1,56 @@
+<?
+use Application\Model\Recaptcha;
+
+$this->headTitle('отзывы о сайте');
+$this->headMeta()
+   ->appendName('keywords', 'отзывы о сайте конкурс диплом без регистрации
+    детей педагогов')
+   ->appendName('description', 'Отзывы о сайте Всероссийского центра детского 
+   творчества Мир Талантов')
+;
+$this->headLink()
+   ->appendStylesheet('/css/index/comments.css');
+$this->inlineScript()
+   ->appendFile('https://www.google.com/recaptcha/api.js')
+;
+
+$comments = $this->comments;
+?>
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <h1>Отзывы о сайте</h1>
+      <p>
+         Нам очень важно знать ваше мнение о нашем сайте.
+         Пишите пожалуйста все, что вам нравится или не нравится в нашей работе.
+         После проверки отзыва модератором он появится на этой странице.
+         Сообщения с этой страницы отправляются анонимно. Если вы хотите, чтобы
+         вам ответили на сообщение, воспользуйтесь формой на странице
+         "Контакты".
+      </p>
+      <form action="?" method="post">
+         <input type="hidden" name="act" value="add_comment">
+         <textarea id="comment" name="comment" title="" required
+            placeholder="Ваш комментарий"></textarea>
+         <div class="g-recaptcha"
+              data-sitekey="<?=Recaptcha::KEY?>"></div>
+         <input type="submit" class="button" value="Отправить">
+      </form>
+
+      <div>
+         <? if(count($comments['data'])){?>
+            <table>
+            <? foreach($comments['data'] as $comment){?>
+               <tr>
+                  <td><?=date('d.m.Y', strtotime($comment['date']))?></td>
+                  <td><?=$comment['text']?></td>
+               </tr>
+            <? }?>
+            </table>
+            <?= $this->paginatorWidget2($comments)?>
+         <? }?>
+      </div>
+   </div>
+</div>

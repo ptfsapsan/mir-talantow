@@ -1,0 +1,21 @@
+<ul class="dd-menu">
+   <?php foreach($this->container as $page){
+      $label = $page->getLabel();
+      $href = $page->getHref();
+      if($page->isActive()){?>
+         <li class="current-menu-item">
+            <a href="javascript:" title="<?=$label?>">
+               <?=$label?>
+            </a>
+         </li>
+      <?php }
+      else{?>
+         <li>
+            <a href="<?=$href?>" title="<?=$label?>">
+               <?=$label?>
+            </a>
+         </li>
+      <?php }?>
+   <?php }?>
+</ul>
+

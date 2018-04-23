@@ -1,0 +1,35 @@
+Добавить бланк сертификата
+<form method="post" enctype="multipart/form-data">
+   <input type="hidden" name="act" value="add_certificate">
+   <input type="file" name="file">
+   <input type="submit" value="Загрузить">
+</form>
+
+<table>
+   <tr>
+      <td>ID</td>
+      <td>Image</td>
+      <td>Количество заказов</td>
+      <td>Active</td>
+      <td>Delete</td>
+   </tr>
+   <? if(count($this->certificates))
+      foreach($this->certificates as $certificate){?>
+      <tr>
+         <td><?=$certificate['id']?></td>
+         <td><img src="/images/blanks/<?=$certificate['thumb']?>" alt=""></td>
+         <td><?=$certificate['article_count']?></td>
+         <td>
+            <a href="?act=ch_active&id=<?=$certificate['id']?>">
+               <?=$certificate['active'] == 'yes'? 'Активен': 'Не активен'?>
+            </a>
+         </td>
+         <td>
+            <a href="?act=del&id=<?=$certificate['id']?>">
+               <img src="<?=$this->basePath('/images/delete-icon.png')?>"
+                  alt="Удалить" title="Удалить">
+            </a>
+         </td>
+      </tr>
+   <? }?>
+</table>

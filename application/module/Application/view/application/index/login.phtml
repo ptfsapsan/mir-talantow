@@ -1,0 +1,79 @@
+<?
+use Application\Model\Recaptcha;
+
+$this->headMeta()
+   ->appendName('robots', 'noindex, nofollow');
+
+$this->headLink()
+   ->appendStylesheet('/css/index/login.css');
+$this->inlineScript()
+   ->appendFile($this->basePath('js/index/login.js'))
+   ->appendFile('//www.google.com/recaptcha/api.js?onload=RecaptchaInit&render=explicit')
+;
+
+$type = $this->session->type;
+?>
+
+<script type="text/javascript">
+   var vars = { 
+      captcha_key: '<?=Recaptcha::KEY?>',
+      type: '<?=$type?>'
+   };
+</script>
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <h1>Вход</h1>
+      <ul>
+         <?
+         $arr = [
+            'login' => 'Вход',
+            'registration' => 'Регистрация',
+            'forgot' => 'Забыли пароль?',
+         ];
+         foreach($arr as $k => $v){?>
+            <li <?=$type == $k? 'class="active"': ''?>>
+               <a href="?act=ch_type&type=<?=$k?>"><?=$v?></a>
+            </li>
+         <? }?>
+      </ul>
+      <div class="clear"></div>
+
+      <div>
+      <? switch($type){
+         case 'login':?>
+            <? $f = $this->form_login;
+            echo $this->form()->openTag($f);
+            foreach($f as $el) {echo $this->formRow($el);}
+            echo $this->form()->closeTag(); ?>
+         <? break;
+
+         case 'registration':?>
+            <? $f = $this->form_registration;
+            echo $this->form()->openTag($f);
+            foreach($f as $el){
+               if($el->getName() == 'submit'){?>
+                  <div id="recaptcha1"></div>
+               <? }
+               echo $this->formRow($el);
+            }
+            echo $this->form()->closeTag(); ?>
+         <? break;
+
+         case 'forgot':?>
+            <? $f = $this->form_forgot;
+            echo $this->form()->openTag($f);
+            foreach($f as $el){
+               if($el->getName() == 'submit'){?>
+                  <div id="recaptcha2"></div>
+               <? }
+               echo $this->formRow($el);
+            }
+            echo $this->form()->closeTag(); ?>
+         <? break;
+      }?>
+      </div>
+   </div>
+</div>

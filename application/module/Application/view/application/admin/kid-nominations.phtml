@@ -1,0 +1,42 @@
+<? $this->headLink()
+   ->appendStylesheet('/css/admin/themes.css');
+$this->headScript()
+   ->appendFile('/js/admin/themes.js');
+?>
+
+
+<div>
+   <form method="get" action="?">
+      <input type="hidden" name="act" value="add">
+      <input type="text" value="" name="title">
+      <textarea name="text"></textarea>
+      <input type="submit" value="Добавить номинацию детских конкурсов">
+   </form>
+
+   <table>
+      <tr>
+         <th>ID</th>
+         <th>Название</th>
+         <th>Описание</th>
+         <th>Удалить</th>
+      </tr>
+      <? foreach($this->nominations as $i){ ?>
+         <tr data-id="<?= $i['id'] ?>">
+            <td><?= $i['id'] ?></td>
+            <td>
+               <input type="text" value="<?= $i['title'] ?>" class="tt_input">
+            </td>
+            <td>
+                 <textarea class="tt_textarea" cols="60"><?= $i['text'] ?></textarea>
+            </td>
+            <td>
+               <a href="?act=del&id=<?= $i['id'] ?>">
+                  <img src="/images/delete-icon.png" alt="Удалить"
+                       title="Удалить">
+               </a>
+            </td>
+         </tr>
+      <? } ?>
+
+   </table>
+</div>

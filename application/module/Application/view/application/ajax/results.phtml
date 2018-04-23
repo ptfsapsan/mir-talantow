@@ -1,0 +1,33 @@
+<?
+function clear($content){
+   return preg_replace('/[\r\n\s]+|<!--[^>]*?-->/s', ' ', $content);
+}
+
+ob_start('clear');
+
+if(count($this->orders)){?>
+   <? foreach($this->orders as $order){?>
+      <tr data-id="<?=$order['id']?>">
+         <td><?=date('d.m.Y', strtotime($order['send_date']))?></td>
+         <? if(empty($p['nomination'])){?>
+            <td>
+               <?=$order['nomination_title']?>
+            </td>
+         <? }?>
+         <? if($this->type == 'kid'){?>
+            <td>
+               <?=$order['theme_title']?>
+            </td>
+         <? }?>
+         <td><?=$this->escapeHtml($order['work_title'])?></td>
+         <td><?=$this->escapeHtml($order['executor_name'])?></td>
+         <td>
+            <?=in_array($order['result'], range(1, 3))?
+               $order['result'].' место': 'Дипломант'?>
+         </td>
+      </tr>
+   <? }?>
+<? }
+else echo 'end';
+
+ob_end_flush();

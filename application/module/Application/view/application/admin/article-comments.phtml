@@ -1,0 +1,42 @@
+<? $statuses = [
+      'new' => 'Новый',
+      'no_accepted' => 'Не подтвержденный',
+      'accepted' => 'Подтвержденный',
+   ];
+?>
+
+<div>
+   <table>
+      <tr>
+         <th>Дата</th>
+         <th>Имя</th>
+         <th>Название статьи</th>
+         <th>Тект комментария</th>
+         <th>Статус</th>
+         <th>Редактировать</th>
+      </tr>
+
+      <? if(count($this->comments)) foreach($this->comments as $comment){?>
+         <tr>
+            <td><?=date('d.m.Y', strtotime($comment['date']))?></td>
+            <td>
+               <?=$comment['name']?>
+            </td>
+            <td>
+               <a href="<?=$this->url('admin-article',
+               ['id' => $comment['article_id']])?>">
+                  <?=$comment['article_name']?>
+               </a>
+            </td>
+            <td><?=$comment['text']?></td>
+            <td><?=$statuses[$comment['status']]?></td>
+            <td>
+               <a href="<?=$this->url('admin-article-comment',
+                  ['id' => $comment['id']])?>">
+                  Редактировать
+               </a>
+            </td>
+         </tr>
+   <? }?>
+   </table>
+</div>

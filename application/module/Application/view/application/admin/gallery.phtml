@@ -1,0 +1,65 @@
+<?php
+use Zend\Form\Element\Select;
+use Application\Model\Images;
+
+$this->headScript()
+   ->appendFile('/js/admin/gallery.js');
+
+$this->headLink()
+   ->appendStylesheet('/css/admin/gallery.css');
+
+
+?>
+
+<div>
+   <? $select = new Select('type');
+   $select->setValueOptions($this->types);
+   $select->setValue($this->type);
+   echo $this->formElement($select);
+   ?>
+
+   <div id="files_area">
+      <?
+      if(count($this->files['data'])){
+         foreach($this->files['data'] as $item){
+            $id = $item['id'];?>
+            <div class="c">
+               <? if(strpos($item['mime_type'], 'image') !== false){ ?>
+                  <a href="javascript:" class="img_preview"
+                     data-src="/files<?=$item['dir'].$item['name']?>">
+                     <img src="/files<?=$item['dir'].$item['thumb']?>" alt=""
+                          width="130">
+                  </a>
+               <? }
+               else{
+                  ?>
+                  <a href="<?=$this->url('file-content', ['id' => $id])?>"
+                     target="_blank">
+                     <img
+                        src="/images/icons/<?=Images::getIcon($item['name'])?>"
+                        alt="">
+                  </a>
+               <? } ?>
+<!--               <a href="?act=rotate&id=--><?//=$id?><!--&angle=90">-->
+<!--                  <img src="--><?//=$this->basePath('images/icons/nav-left.gif')?><!--"-->
+<!--                     alt="">-->
+<!--               </a>-->
+<!--               <a href="?act=rotate&id=--><?//=$id?><!--&angle=270">-->
+<!--                  <img src="--><?//=$this->basePath('images/icons/nav-right.gif')?><!--"-->
+<!--                     alt="">-->
+<!--               </a>-->
+               <a href="?act=delete&id=<?=$id?>">
+                  <img src="<?=$this->basePath('images/delete-icon.png')?>"
+                     alt="Удалить" title="Удалить">
+               </a>
+            </div>
+         <? }
+         echo $this->paginatorWidget($this->files);
+      }
+      else{
+         echo 'Не найдено ни одного файла';
+      } ?>
+      <div class="clear"></div>
+   </div>
+
+</div>

@@ -1,0 +1,47 @@
+<? $statuses = [
+      'new' => 'Новый',
+      'no_accepted' => 'Не акцептовано',
+      'accepted' => 'Акцептовано',
+   ];?>
+
+<a href="<?=$this->url('admin', ['action' => 'add-article'])?>">
+   Добавить статью
+</a>
+<div>
+   <form method="post">
+      <input type="hidden" name="act" value="search">
+
+   </form>
+</div>
+
+<div>
+   <table width="100%">
+      <tr>
+         <th>Название статьи</th>
+         <th>Email</th>
+         <th>Статус</th>
+         <th>Время отправки</th>
+         <th></th>
+      </tr>
+
+      <? if($this->articles) foreach($this->articles as $article){
+         $id = $article['id'];?>
+         <tr>
+            <td>
+               <a href="<?=$this->url('admin-article', ['id' => $id])?>">
+                  <?=$article['title']?>
+               </a>
+            </td>
+            <td><?=$article['email']?></td>
+            <td><?=$statuses[$article['status']]?></td>
+            <td><?=empty($article['send_date'])? '':
+                  date('d.m.Y H:i', strtotime($article['send_date']))?></td>
+            <td>
+               <a href="?act=delete&id=<?=$id?>">
+                  <img src="/images/delete-icon.png" alt="">
+               </a>
+            </td>
+         </tr>
+      <? }?>
+   </table>
+</div>

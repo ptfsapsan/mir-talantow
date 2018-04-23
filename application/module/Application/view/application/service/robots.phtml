@@ -1,0 +1,58 @@
+<? $domain = $this->serverUrl();?>
+User-Agent: *
+
+Disallow: /
+
+Allow: <?=$this->url('home')?>$
+
+Allow: <?=$this->url('pay')?>
+
+Allow: <?=$this->url('kid')?>
+
+Allow: <?=$this->url('educator')?>
+
+Allow: /resultati-konkursov/kid/*
+
+Allow: /resultati-konkursov/educator/*
+
+Allow: /galereya-rabot/kid
+
+Allow: /galereya-rabot/educator
+
+Allow: /work/*
+
+Allow: /login
+
+Allow: /ajax
+
+Allow: <?=$this->url('rules')?>$
+
+Allow: <?=$this->url('contacts')?>$
+
+Allow: <?=$this->url('diploms')?>$
+
+Allow: <?=$this->url('comments')?>$
+
+Allow: <?=$this->url('articles')?>
+
+Allow: /statya
+
+Allow: /*/article/
+
+Allow: <?=$this->url('add-article')?>$
+
+Allow: /sitemap.xml
+
+Allow: /js/
+
+Allow: /css/
+
+Allow: /images/
+
+Allow: /files/
+
+Disallow: /images/captcha/
+
+Host: https://mir-talantow.ru
+
+Sitemap: <?=$domain?>/sitemap.xml

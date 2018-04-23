@@ -1,0 +1,32 @@
+<?
+$page = $this->page;
+$pages = $this->pages;
+$page = $page < 1? 1: ($page > $pages? $pages: $page);
+if($on_page < 1){
+   $on_page = 1;
+}
+$begin = $page > 3? $page - 2: 1;
+$end = ($pages - $page) > 2? $page + 2: $pages;
+?>
+
+<div class="pagination">
+   <? if($begin != 1){?>
+      <a href="javascript:" data-page="1">1</a> ...
+   <? }
+   foreach(range($begin, $end) as $i){
+      if($page != $i){?>
+         <a href="javascript:" data-page="<?=$i?>">
+            <?=$i?>
+         </a>
+      <? }
+      else{
+         ?>
+         <span><?=$i?></span>
+      <? }
+   }
+   if($end != $pages){?>
+      ... <a href="javascript:" data-page="<?=$pages?>">
+         <?=$pages?>
+      </a>
+   <? } ?>
+</div>

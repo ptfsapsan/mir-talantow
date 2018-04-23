@@ -1,0 +1,15 @@
+<?php
+$settings = $this->layout()->settings;
+
+
+$page = $this->page;
+$title = empty($page['title'])? '': $this->escapeHtml($page['title']);
+$text = empty($page['text'])? '': $page['text'];
+?>
+
+
+<h1><?=$title?></h1>
+
+<div id="cont">
+   <?=$text?>
+</div>

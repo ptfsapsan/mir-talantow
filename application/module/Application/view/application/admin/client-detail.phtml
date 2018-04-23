@@ -1,0 +1,45 @@
+<?php
+$orders = $this->orders;
+?>
+
+Отправить письмо клиенту:
+<form method="post">
+   <input type="hidden" name="act" value="send_message">
+   <div><textarea name="message" cols="100" rows="10" title=""></textarea></div>
+   <input type="submit" value="Отправить клиенту">
+</form><br>
+
+<div>
+   <div>Всего заявок: <?=$orders['count']?></div>
+   <? if(count($orders['data'])){?>
+      <table width="100%">
+         <tr>
+            <th>ID</th>
+            <th>Дата</th>
+            <th>Исполнитель</th>
+            <th>Руководитель</th>
+            <th>Наименование работы</th>
+            <th>Цена</th>
+            <th>Оплачено</th>
+         </tr>
+         <? foreach($orders['data'] as $order){?>
+            <tr>
+               <td>
+                  <a href="<?=$this->url('admin-order-detail',
+                     ['id' => $order['id']])?>">
+                     <?=$order['id']?>
+                  </a>
+               </td>
+               <td><?=date('d.m.Y', strtotime($order['date']))?></td>
+               <td><?=$order['executor_name']?></td>
+               <td><?=$order['chief_name']?></td>
+               <td><?=$order['work_title']?></td>
+               <td><?=$order['price']?></td>
+               <td><?=$order['paid']?></td>
+            </tr>
+         <? }?>
+      </table>
+      <?=$this->paginatorWidget($orders)?>
+   <? }
+   else echo 'Заказов у этого клиента пока нет';?>
+</div>

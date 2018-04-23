@@ -1,0 +1,2 @@
+<? $data = preg_replace('/[\r\n\s]+|<!--[^>]*?-->/s', ' ', $this->data);
+echo \Zend\Json\Json::encode($this->data);

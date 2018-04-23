@@ -1,0 +1,78 @@
+
+<?php
+use Zend\Form\Element\Select;
+use Zend\Form\Element\Radio;
+
+$this->headScript()->appendFile('/js/admin/results.js');
+
+$s = $this->session;
+$r = $this->results;
+$nominations = array_column($this->nominations, 'title', 'id');
+$themes = [];
+$is_theme = (bool)count($this->themes);
+if($is_theme) $themes = array_column($this->themes, 'title', 'id');
+
+$radio = new Radio('type');
+$radio->setValueOptions([
+   'kid' => 'Конкурсы для детей',
+   'educator' => 'Конкурсы для педагогов',
+]);
+$radio->setValue($s->type);
+echo $this->formElement($radio);
+?>
+
+
+<form method="get" style="margin-top: 25px">
+   <input type="hidden" name="act" value="add_result">
+   Добавить результат
+   <div>
+      <input type="text" name="date" value="<?=date('Y-m-d H:i:s')?>">
+      <? $select = new Select('nomination');
+      $select->setValueOptions(array_column($this->nominations, 'title', 'id'));
+      $select->setValue($s->nomination);
+      echo $this->formElement($select);
+   
+      if($is_theme){
+         $select = new Select('theme');
+         $select->setValueOptions(array_column($this->themes, 'title', 'id'));
+         $select->setValue($s->theme);
+         echo $this->formElement($select);
+      }
+      ?>
+      <input type="text" name="work_title" placeholder="Название работы">
+      <input type="text" name="executor_name" placeholder="Исполнитель">
+      <? $select = new Select('result');
+      $select->setValueOptions(array_combine(range(1, 4), range(1, 4)));
+      echo $this->formElement($select);
+      ?>
+   </div>
+   <input type="submit" value="Добавить">
+</form>
+<? if(count($r['data'])){
+   ?>
+   <table>
+      <tr>
+         <th>Дата</th>
+         <th>Номинация</th>
+         <? if($is_theme){?>
+            <th>Тема</th>
+         <? }?>
+         <th>Название работы</th>
+         <th>Исполнитель</th>
+         <th>Результат</th>
+      </tr>
+   <? foreach($r['data'] as $i){?>
+      <tr>
+         <td><?=$i['date']?></td>
+         <td><?=$nominations[$i['nomination_id']]?></td>
+         <? if($is_theme){?>
+            <td><?=$themes[$i['theme_id']]?></td>
+         <? }?>
+         <td><?=$i['work_title']?></td>
+         <td><?=$i['executor_name']?></td>
+         <td><?=$i['result']?></td>
+      </tr>
+   <? }?>
+   </table>
+<? }
+else echo 'Не найдено ни одного результата';

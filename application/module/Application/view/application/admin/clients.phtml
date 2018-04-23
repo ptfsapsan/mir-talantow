@@ -1,0 +1,38 @@
+<? 
+$this->headScript()
+   ->appendFile($this->basePath('js/admin/clients.js'))
+;
+$clients = $this->clients;
+$session = $this->session;
+?>
+
+<div>
+   Email
+   <input type="text" value="<?=$session->email?>" title="" id="search_email">
+</div>
+
+<? if($clients['count'] > 0){?>
+   <table width="100%">
+      <tr>
+         <th>email</th>
+         <th>Исполнитель</th>
+         <th>Руководитель</th>
+         <th>Заявок</th>
+      </tr>
+      <? foreach($clients['data'] as $client){?>
+         <tr>
+            <td>
+               <a href="<?=$this->url('admin_client_detail',
+                  ['email' => $client['email']])?>">
+                  <?=$client['email']?>
+               </a>
+            </td>
+            <td><?=$client['executor_name']?></td>
+            <td><?=$client['chief_name']?></td>
+            <td><?=$client['count']?></td>
+         </tr>
+      <? }?>
+   </table>
+   <? echo $this->paginatorWidget($clients);
+}
+else echo 'Клиенты не найдены';

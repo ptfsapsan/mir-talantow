@@ -1,0 +1,61 @@
+<?
+function clear($content){
+   return preg_replace('/[\r\n\s]+|<!--[^>]*?-->/s', ' ', $content);
+}
+
+ob_start('clear');
+
+
+if(count($this->files)) foreach($this->files as $file){?>
+   <div>
+      <? if(strpos($file['mime_type'], 'image/') !== false){
+         $dir = '/files/temp_files/'.(empty($file['phpsessid'])?
+               $file['user_id']: $file['phpsessid']).'/';?>
+      <a href="javascript:" data-src="<?=$dir.$file['name']?>" class="tmp_img">
+         <img src="<?=$this->basePath($dir.$file['thumb'])?>"
+              alt="<?=$file['old_name']?>" title="<?=$file['old_name']?>">
+      </a>
+      <? }
+      else{?>
+      <a href="<?=$this->url('file-content', ['id' => $file['id'],
+      'type' => 'temp'])?>" target="_blank">
+         <? if(strpos($file['mime_type'], 'application/pdf') !== false){?>
+            <img src="/images/icons/pdf.png" alt="<?=$file['old_name']?>"
+                 title="<?=$file['old_name']?>">
+         <? }
+         elseif(strpos($file['mime_type'], 'zip') !== false){?>
+            <img src="/images/icons/zip.png" alt="<?=$file['old_name']?>"
+                 title="<?=$file['old_name']?>">
+         <? }
+         elseif(strpos($file['mime_type'], 'audio/') !== false){?>
+            <img src="/images/icons/audio.png" alt="<?=$file['old_name']?>"
+                 title="<?=$file['old_name']?>">
+         <? }
+         elseif(strpos($file['mime_type'], 'video/') !== false){?>
+            <img src="/images/icons/video.png" alt="<?=$file['old_name']?>"
+                 title="<?=$file['old_name']?>">
+         <? }
+         elseif(strpos($file['mime_type'], 'text/plain') !== false){?>
+            <img src="/images/icons/text.png" alt="<?=$file['old_name']?>"
+                 title="<?=$file['old_name']?>">
+         <? }
+         elseif(strpos($file['name'], '.ppt') !== false){?>
+            <img src="/images/icons/pptx.png" alt="<?=$file['old_name']?>"
+                 title="<?=$file['old_name']?>">
+         <? }
+         elseif(strpos($file['name'], '.doc') !== false){?>
+            <img src="/images/icons/docx.png" alt="<?=$file['old_name']?>"
+                 title="<?=$file['old_name']?>">
+         <? }
+         elseif(strpos($file['name'], '.xls') !== false){?>
+            <img src="/images/icons/xlsx.png" alt="<?=$file['old_name']?>"
+                 title="<?=$file['old_name']?>">
+         <? }?>
+      </a>
+      <? }?>
+      <img class="del_file" src="/images/delete-icon.png" alt="Удалить"
+           title="Удалить" data-id="<?=$file['id']?>">
+   </div>
+<? }
+
+ob_end_flush();

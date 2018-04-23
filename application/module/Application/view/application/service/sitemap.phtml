@@ -1,0 +1,90 @@
+<?
+$domain = $this->serverUrl();
+
+echo '<?xml version="1.0" encoding="UTF-8"?>';
+echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+$container = $this->navigation('navigation-index')
+   ->getContainer();
+foreach($container as $item){?>
+   <url>
+      <loc><?= $domain . $item->getHref() ?></loc>
+      <priority>1</priority>
+   </url>
+<? }
+
+   // детские конкурсы
+foreach($this->kid_nominations as $kid_nomination){
+   foreach($this->themes as $theme){?>
+      <url>
+         <loc>
+            <?= $domain . $this->url(
+               'kid', [
+                  'nomination' => $kid_nomination['trans'],
+                  'theme' => $theme['trans'],
+               ]
+            ) ?>
+         </loc>
+         <priority>0.7</priority>
+      </url>
+   <? }
+}
+
+   // конкурсы для педагогов
+foreach($this->educator_nominations as $educator_nomination){?>
+   <url>
+      <loc><?= $domain . $this->url(
+            'educator', [
+               'nomination' => $educator_nomination['trans'],
+            ]
+         ) ?>
+      </loc>
+      <priority>0.7</priority>
+   </url>
+<? }
+
+   // темы статей
+if(count($this->article_themes)) foreach($this->article_themes as $article_theme){?>
+   <url>
+      <loc><?= $domain . $this->url(
+            'articles', [
+               'theme' => $article_theme['trans'],
+            ]
+         ) ?>
+      </loc>
+      <priority>0.7</priority>
+   </url>
+<? }
+
+   // статьи
+if(count($this->articles)) foreach($this->articles as $article){?>
+   <url>
+      <loc><?= $domain . $this->url(
+            'article', [
+               'theme' => $article['theme_trans'],
+               'id' => $article['id'],
+            ]
+         ) ?>
+      </loc>
+      <priority>0.6</priority>
+   </url>
+<? }
+
+// статьи блогов со страниц юзеров
+if(count($this->blogs)) foreach($this->blogs as $blog){?>
+   <url>
+      <loc><?= $domain . $this->url(
+            'site-article', [
+               'site_code' => $blog['site_code'],
+               'id' => $blog['id'],
+            ]
+         ) ?>
+      </loc>
+      <priority>0.4</priority>
+   </url>
+<? }
+
+// из галереи
+//if(count($this->gallery)) foreach($this->gallery as $order){?>
+<? //}
+
+echo '</urlset>';

@@ -1,0 +1,144 @@
+<?
+use Application\Model\Orders;
+use Zend\Form\Element\Select;
+
+$types = Orders::getTypes();
+$p = $this->params;
+$type = $p['type'];
+$kind = $p['kind'];
+list($k, $d) = explode(' ', $types[$type], 2);
+
+
+$this->headTitle('результаты конкурсов ' . $d);
+$this->headMeta()
+   ->appendName(
+      'keywords', 'Результаты конкурс диплом без регистрации ' . $d
+      . ' дистанционные творческие бесплатно'
+   )
+   ->appendName(
+      'description', 'Результаты Всероссийских дистанционных 
+   творческих конкурсов ' . $d
+   )
+   ->appendName('robots', 'index, follow');
+
+
+$this->inlineScript()
+   ->appendFile('/js/index/results.js');
+$this->headLink()
+   ->appendStylesheet('/css/index/results.css');
+?>
+
+<script>
+   var vars = {
+      type: '<?=$type?>',
+      kind: '<?=$kind?>'
+   }
+</script>
+
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <h1>Результаты конкурсов <?= $d ?></h1>
+      <div>
+         <div class="title">
+            Тип конкурса
+         </div>
+         <? foreach($types as $k => $v){ ?>
+            <div class="inp">
+               <a href="<?= $this->url(
+                  'results', [
+                  'type' => $k,
+                  'kind' => 'all'
+               ]
+               ) ?>">
+                  <div class="button <?= $type == $k? 'active': '' ?>">
+                     <?= $v?>
+                  </div>
+               </a>
+            </div>
+         <? } ?>
+      </div>
+      <div>
+         <div class="title">
+            Вид конкурса
+         </div>
+         <? $kinds = ['all' => 'Все'] + Orders::getKinds();
+         foreach($kinds as $k => $v){
+            ?>
+            <div class="inp">
+               <a href="<?= $this->url(
+                  'results', [
+                  'type' => $this->params['type'],
+                  'kind' => $k
+               ]
+               ) ?>">
+                  <div class="button <?= $kind == $k? 'active': '' ?>"
+                       data-kind="<?= $k ?>"><?= $v ?></div>
+               </a>
+            </div>
+         <? } ?>
+      </div>
+      <div>
+         <div class="title">
+            Номинация
+         </div>
+         <div class="inp">
+            <? $nominations = [0 => 'Все номинации'] +
+               array_column($this->nominations, 'title', 'id');
+            $select = new Select('nomination');
+            $select->setValueOptions($nominations);
+            $select->setValue(empty($p['nomination'])? 0: $p['nomination']);
+            echo $this->formElement($select);
+            ?>
+         </div>
+      </div>
+      <? if(count($this->themes)){ ?>
+         <div>
+            <div class="title">
+               Тема конкурса
+            </div>
+            <div class="inp">
+               <? $themes = [0 => 'Все темы'] +
+                  array_column($this->themes, 'title', 'id'); 
+               $select = new Select('theme');
+               $select->setValueOptions($themes);
+               $select->setValue(empty($p['theme'])? 0: $p['theme']);
+               echo $this->formElement($select);
+               ?>
+            </div>
+         </div>
+      <? } ?>
+
+      <div class="clear"></div>
+      <p id="pre_text">
+         Мы публикуем результаты за последние 2 месяца. Чтобы перейти на
+         страничку выданного диплома найдите строку со
+         своей работой, кликните по ней, в открывшемся окне введите
+         электронный адрес, указанный при заполнении заявки на участие в
+         конкурсе, нажмите на кнопку "Перейти к диплому".
+      </p>
+
+      <table class="main-table">
+         <thead>
+         <tr>
+            <th>Дата</th>
+            <th>Номинация</th>
+            <? if($p['type'] == 'kid'){ ?>
+               <th>Тема конкурса</th>
+            <? } ?>
+            <th>Название работы</th>
+            <th>Исполнитель</th>
+            <th>Результат</th>
+         </tr>
+         </thead>
+         <tbody id="results_field">
+
+         </tbody>
+      </table>
+      <div id="loading">
+         <img src="/images/ajax-loader.gif" alt="">
+      </div>
+   </div>
+</div>

@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @var array $thank
+ * @var \Zend\Form\Form $thankForm
+ */
+$this->headLink()
+    ->appendStylesheet('/css/admin/order-detail.css');
+
+$link = $this->url('thank', ['code' => $thank['code']]);
+?>
+
+<div>
+    <? $f = $thankForm; ?>
+    <?= $this->form()->openTag($f) ?>
+    <? foreach ($f as $el) { ?>
+        <div><?= $this->formRow($el) ?></div>
+    <? } ?>
+    <?= $this->form()->closeTag() ?>
+
+    <div style="margin: 20px 0">
+        <? if ($thank['send_date']) { ?>
+            Отправлено <?= date('d.m.Y H:i', strtotime($thank['send_date'])) ?>
+        <? } else {
+            ?>
+            <a href="?act=send">Отправить благодарность</a>
+        <? } ?>
+    </div>
+    <a href="<?= $link ?>" target="_blank">
+        <img src="<?= $link ?>" alt="" style="width: 200px">
+    </a>
+</div>

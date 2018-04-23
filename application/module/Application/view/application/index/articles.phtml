@@ -1,0 +1,105 @@
+<?php
+
+use Zend\Form\Element\Select;
+
+$theme = $this->theme;
+$title = '';
+if($theme){
+   $title = $this->escapeHtml($theme['title']);
+   $this->headTitle("Статьи на тему $title");
+   $this->headMeta()
+      ->appendName('keywords', "Статьи на тему $title")
+      ->appendName('description', "Статьи на тему $title")
+      ->appendName('robots', 'index, follow');
+}
+else{
+   $this->headTitle("Все статьи");
+   $this->headMeta()
+      ->appendName('keywords', "Все статьи")
+      ->appendName('description', "Все статьи")
+      ->appendName('robots', 'index, follow');
+}
+$this->inlineScript()
+   ->appendFile($this->basePath('/js/index/articles.js'))
+;
+
+$this->headLink()
+   ->appendStylesheet($this->basePath('/css/index/articles.css'));
+
+$articles = $this->articles;
+?>
+
+
+<div id="home">
+   <div id="left_col">
+      <ul>
+         <li>
+            <a href="<?=$this->url('add-article')?>">
+               Добавить статью
+            </a>
+         </li>
+         <li>
+            <a href="<?=$this->url('articles', [])?>" <?=$theme? '':
+            'class="active"'?>>
+               Все темы
+            </a>
+         </li>
+         <? $themes = [
+            $this->url('add-article') => 'Добавить статью',
+            $this->url('articles', []) => 'Все темы',
+         ];
+         foreach($this->themes as $i){
+            $link = $this->url('articles', ['theme' => $i['trans']]);
+            $themes[$link] = 'Статьи на тему: '.$i['title'];
+            if($theme['id'] == $i['id']){?>
+               <li>
+                  <a href="javascript:" class="active"><?=$i['title']?></a>
+               </li>
+            <? }
+            else{?>
+               <li>
+                  <a href="<?=$link?>"><?=$i['title']?></a>
+               </li>
+            <? }
+         }?>
+      </ul>
+   </div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <div id="theme_select">
+         <? $select = new Select('article_theme');
+         $select->setValueOptions($themes);
+         $select->setValue($this->url('articles',
+            ['theme' => $theme['trans']]));
+         echo $this->formElement($select);
+         ?>
+      </div>
+
+
+      <h1><?=$theme? "Статьи на тему: « $title »": 'Все статьи'?></h1>
+      <p><?=$theme['description']?></p>
+
+      <? if(count($articles['data'])){?>
+         <table>
+            <tr>
+               <th>Название статьи</th>
+               <th>Автор</th>
+            </tr>
+            <? foreach($articles['data'] as $article){?>
+               <tr>
+                  <td>
+                     <a href="<?=$this->url('article', [
+                        'theme' => $article['theme_trans'],
+                        'id' => $article['id'],
+                     ])?>">
+                        <?=$article['title']?>
+                     </a>
+                  </td>
+                  <td><?=$article['name']?></td>
+               </tr>
+            <? } ?>
+         </table>
+         <?= $this->paginatorWidget2($articles)?>
+      <? }?>
+   </div>
+</div>

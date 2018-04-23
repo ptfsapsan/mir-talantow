@@ -1,0 +1,45 @@
+<? $this->headLink()
+   ->appendStylesheet('/css/admin/themes.css');
+$this->headScript()
+   ->appendFile('/js/admin/article-themes.js');
+?>
+
+
+<div>
+   <form method="get">
+      <input type="hidden" name="act" value="add">
+      <input type="text" value="" name="title" title="">
+      <textarea name="description" title=""></textarea>
+      <input type="submit" value="Добавить тему статьи">
+   </form>
+
+   <table>
+      <tr>
+         <th>ID</th>
+         <th>Название</th>
+         <th>Описание</th>
+         <th>Удалить</th>
+      </tr>
+      <? foreach($this->themes as $i){?>
+         <tr data-id="<?=$i['id']?>">
+            <td><?=$i['id']?></td>
+            <td>
+               <input type="text" value="<?=$i['title']?>" title=""
+                      class="tt_input">
+            </td>
+            <td>
+               <textarea class="tt_textarea" cols="60" title=""><?=
+                  $i['description'] ?></textarea>
+            </td>
+
+            <td>
+               <a href="?act=del&id=<?=$i['id']?>">
+                  <img src="<?=$this->basePath('/images/delete-icon.png')?>"
+                     alt="Удалить" title="Удалить">
+               </a>
+            </td>
+         </tr>
+      <? }?>
+
+   </table>
+</div>

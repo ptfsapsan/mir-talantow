@@ -1,0 +1,102 @@
+<?php
+
+use Application\Model\Recaptcha;
+use Zend\Form\Element\Select;
+
+$article = $this->article;
+$title = $this->escapeHtml($article['title']);
+$this->headTitle("Статья $title");
+$this->headMeta()
+   ->appendName('keywords', "Статья $title")
+   ->appendName('description', "Статья $title")
+   ->appendName('robots', 'index, follow');
+
+$this->headLink()
+   ->appendStylesheet($this->basePath('/css/index/articles.css'));
+
+$this->inlineScript()
+   ->appendFile('//www.google.com/recaptcha/api.js')
+   ->appendFile($this->basePath('/js/index/articles.js'))
+;
+?>
+
+
+<div id="home">
+   <div id="left_col">
+      <ul>
+         <li>
+            <a href="<?=$this->url('add-article', [])?>">
+               Добавить статью
+            </a>
+         </li>
+         <li>
+            <a href="<?=$this->url('articles', [])?>">
+               Все темы
+            </a>
+         </li>
+         <? $themes = [
+            $this->url('add-article') => 'Добавить статью',
+            $this->url('articles', []) => 'Все темы',
+         ];
+         foreach($this->themes as $i){
+            $link = $this->url('articles', ['theme' => $i['trans']]);
+            $themes[$link] = 'Статьи на тему: '.$i['title'];
+            if($article['article_theme_id'] == $i['id']){?>
+            <li>
+               <a href="<?=$link?>" class="active"><?=$i['title']?></a>
+            </li>
+         <? }
+         else{
+            ?>
+            <li>
+               <a href="<?=$link?>"><?=$i['title']?></a>
+            </li>
+         <? }
+         }?>
+      </ul>
+   </div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <div id="theme_select">
+         <? $select = new Select('article_theme');
+         $select->setValueOptions($themes);
+         $select->setValue($this->url('articles',
+            ['theme' => $article['theme_trans']]));
+         echo $this->formElement($select);
+         ?>
+      </div>
+
+      <h1>Статья: "<?=$title?>"</h1>
+      <div>
+         <?=$article['text']?>
+      </div>
+      <hr class="end_article">
+      <div>
+         Количество коментариев: <?=$article['comment_count']?>
+      </div>
+      <hr class="hr">
+      <div>
+         <? $f = $this->form_comment;
+         echo $this->form()->openTag($f);
+         foreach($f as $el){
+            echo $this->formRow($el);
+            if($el->getName() == 'text'){?>
+               <div class="g-recaptcha"
+                    data-sitekey="<?=Recaptcha::KEY?>"></div>
+            <? }
+         }?>
+         <?=$this->form()->closeTag();?>
+      </div>
+      <div id="comments">
+         <? foreach($this->comments as $comment){?>
+            <div class="comm_name">
+               <?=date('d.m.Y', strtotime($comment['date']))?>,
+               <?=$comment['name']?>
+            </div>
+            <div class="comm_text">
+               <?=$this->escapeHtml($comment['text'])?>
+            </div>
+         <? }?>
+      </div>
+   </div>
+</div>

@@ -1,0 +1,45 @@
+<?
+$this->inlineScript()
+   ->appendFile('//yastatic.net/es5-shims/0.0.2/es5-shims.min.js')
+   ->appendFile('//yastatic.net/share2/share.js')
+;
+//$this->headLink()
+//   ->appendStylesheet('/css/index/diplom.css');
+$this->headTitle('диплом');
+$this->headMeta()->appendName('robots', 'noindex, nofollow');
+
+
+$code = $this->code;
+$link = $this->serverUrl().'/diploma/'.$code;
+$l = $this->url('diplom', ['code' => $code], ['query' => ['act' => 'save']]);
+?>
+
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <div>
+         <h1>Диплом</h1>
+         <p>
+            Вы можете поделиться своим успехом на конкурсе в социальных
+            сетях, для этого просто нажмите на кнопку соответствующего ресурса.
+         </p>
+         <div class="ya-share2" data-lang="ru" data-size="m"
+              data-services="vkontakte,facebook,odnoklassniki,moimir,gplus,viber,whatsapp"
+              data-title='Диплом участника всероссийского конкурса <?=
+              $this->layout()->config['site_name']?>'
+         ></div>
+         <p>
+            Если Вы хотите сохранить диплом на своем компьютере перейдите по
+            <a href="<?=$l?>">ССЫЛКЕ</a>.
+         </p>
+      </div>
+      <div id="diplom_div">
+         <a href="<?=$l?>">
+            <img src="<?=$link?>" alt="Диплом" style="width: 100%;">
+         </a>
+      </div>
+
+   </div>
+</div>

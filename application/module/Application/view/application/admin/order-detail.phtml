@@ -1,0 +1,21 @@
+<?
+$this->headLink()
+   ->appendStylesheet('/css/admin/order-detail.css');
+
+
+$d = $this->order;
+$link = $this->url('diploma', ['code' => $d['code']]);
+?>
+
+<div>
+   <?=$this->form()->openTag($this->form)?>
+   <? foreach($this->form as $el){?>
+      <div><?=$el->getOption('label')?></div>
+      <div><?=$this->formElement($el)?></div>
+   <? }?>
+   <?=$this->form()->closeTag()?>
+
+   <a href="<?=$link?>" target="_blank">
+      <img src="<?=$link?>" alt="" style="width: 200px">
+   </a>
+</div>

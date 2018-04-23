@@ -1,0 +1,9 @@
+<? reset($sizes);
+$size = current($sizes);
+foreach($imgs as $img){
+   ?>
+   <div class="img_wr">
+      <a class="but_del" href="#"></a>
+      <img src="<?=$dir.$size.'/'.$img?>">
+   </div>
+<? }

@@ -1,0 +1,120 @@
+<?php
+$this->headLink()
+   ->appendStylesheet($this->basePath('css/user/site-settings.css'))
+   ->appendStylesheet($this->basePath('css/checkbox-button.css'))
+;
+$this->inlineScript()
+   ->appendFile($this->basePath('/js/jquery.uploadifive.min.js'))
+   ->appendFile($this->basePath('/js/jscolor.min.js'))
+   ->appendFile($this->basePath('/js/user/site-settings.js'))
+;
+$settings = $this->settings;
+$domain = $this->serverUrl();?>
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <h1>Настройки сайта</h1>
+
+      <div class="link">
+         Ваш сайт размещается по ссылке
+         <? $link = $this->url('site', ['site_code' => $settings['site_code']]);
+         ?>
+         <a href="<?=$link?>" target="_blank"><?=$domain.$link?></a>
+      </div>
+
+
+      <? // добавление логотипа ?>
+      <div class="div-bor">
+         <p>
+            Загрузите логотип сайта. Он будет показываться в левом верхнем
+            углу сайта.
+         </p>
+         <div>
+            <div id="load_button_logo"></div>
+            <div id="queue_logo"></div>
+         </div>
+         <div id="file_logo"></div>
+      </div>
+
+      <? // добавление шапки ?>
+      <div class="div-bor">
+         <p>
+            Загрузите картинку в шапку сайта. Он будет показываться в верхней
+            части страницы сайта.
+         </p>
+         <div>
+            <div id="load_button_head"></div>
+            <div id="queue_head"></div>
+         </div>
+         <div id="file_head"></div>
+      </div>
+
+
+      <div id="m_form">
+         <? $f = $this->form_settings;
+         echo $this->form()->openTag($f);
+         foreach($f as $el){
+            switch($el->getName()){
+               case 'color_1':?>
+                  <label><span>Выберите цвета сайта</span></label>
+                  <? echo $this->formRow($el);
+                  break;
+               case 'blog':?>
+                  <p>Хотите ли Вы вести блог на своем сайте? В своем блоге Вы
+                     сможете писать статьи на
+                     различные темы и получать комментарии на них от
+                     посетителей сайта.</p>
+                  <div class="can-toggle">
+                     <?=$this->formRow($el)?>
+                     <label for="blog">
+                        <span class="toggle-switch" data-checked="On"
+                           data-unchecked="Off"></>
+                     </label>
+                  </div>
+                  <? break;
+               case 'blog_comments':?>
+                  <p>Хотите ли Вы, чтобы посетители сайта оставляли свои
+                     комментарии? Если по каким-то причинам Вы не захотите,
+                     чтобы какой-либо комментарий появился под статьей, Вы
+                     сможете его деактивировать.
+                  </p>
+                  <div class="can-toggle">
+                     <?=$this->formRow($el)?>
+                     <label for="blog_comments">
+                        <span class="toggle-switch" data-checked="On"
+                              data-unchecked="Off"></>
+                     </label>
+                  </div>
+                  <? break;
+               case 'contacts':?>
+                  <p>Хотите получать сообщения от посетителей своего сайта?
+                     На страничке будет размещена форма, с помощью которой
+                     посетители сайта смогут написать Вам письмо и отправить
+                     на адрес электронной почты, указанный Вами при регистрации.
+                  </p>
+                  <div class="can-toggle">
+                     <?=$this->formRow($el)?>
+                     <label for="contacts">
+                        <span class="toggle-switch" data-checked="On"
+                              data-unchecked="Off"></>
+                     </label>
+                  </div>
+                  <? break;
+               default: echo $this->formRow($el);
+            }
+
+         }
+         echo $this->form()->closeTag();?>
+      </div>
+
+      <div class="link">
+         Ваш сайт размещается по ссылке
+         <? $link = $this->url('site', ['site_code' => $settings['site_code']]);
+         ?>
+         <a href="<?=$link?>" target="_blank"><?=$domain.$link?></a>
+      </div>
+
+   </div>
+</div>

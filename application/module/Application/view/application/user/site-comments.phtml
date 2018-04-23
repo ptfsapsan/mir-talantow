@@ -1,0 +1,68 @@
+<?php
+use Zend\Form\Element\Checkbox;
+
+$this->headLink()
+   ->appendStylesheet($this->basePath('css/checkbox-button.css'))
+;
+$this->inlineScript()
+   ->appendFile($this->basePath('/js/user/site-comments.js'))
+;
+
+
+$checkbox = new Checkbox('active');
+?>
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <h1>Комментарии статей блога</h1>
+
+      <? if(count($this->comments)){?>
+         <table>
+            <tr>
+               <th>Дата</th>
+               <th>Название статьи</th>
+               <th>Имя</th>
+               <th>Содержание комментария</th>
+               <th>Активность</th>
+               <th>Удалить</th>
+            </tr>
+            <? foreach($this->comments as $comment){
+               $id = $comment['id'];?>
+               <tr>
+                  <td><?=date('d.m.Y H:i', strtotime($comment['date']))?></td>
+                  <td><?=$comment['title']?></td>
+                  <td><?=$comment['name']?></td>
+                  <td><?=$comment['text']?></td>
+                  <td>
+                     <div class="can-toggle">
+                        <? $checkbox->setAttributes([
+                           'id' => 'b_'.$id,
+                           'data-id' => $id,
+                           'checked' => $comment['active'] == 'yes',
+                        ]);
+                        echo $this->formElement($checkbox);?>
+                        <label for="b_<?=$id?>">
+                        <span class="toggle-switch" data-checked="On"
+                              data-unchecked="Off"></>
+                        </label>
+                  </td>
+                  <td>
+                     <a href="?act=delete&id=<?=$id?>">
+                        <img src="<?=$this->basePath('images/delete-icon.png')?>"
+                             alt="">
+                     </a>
+                  </td>
+               </tr>
+            <? }?>
+         </table>
+
+      <? }
+      else{?>
+         <p>Комментариев пока нет</p>
+      <? }?>
+
+
+   </div>
+</div>

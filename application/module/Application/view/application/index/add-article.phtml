@@ -1,0 +1,107 @@
+<?php
+
+use Application\Model\Orders;
+use Application\Model\Recaptcha;
+use Zend\Form\Element\Select;
+
+$this->headTitle("Добавить статью");
+$this->headMeta()
+   ->appendName('keywords', "Добавить статью Мир талантов бесплатно заявка")
+   ->appendName('description', "Добавить статью Мир талантов бесплатно заявка")
+   ->appendName('robots', 'index, follow');
+
+$this->headLink()
+   ->appendStylesheet($this->basePath('/css/index/articles.css'));
+$this->inlineScript()
+   ->appendFile('//www.google.com/recaptcha/api.js')
+   ->appendFile($this->basePath('/js/tinymce/tinymce.min.js'))
+   ->appendFile($this->basePath('/js/tinymce/langs/ru.js'))
+   ->appendFile($this->basePath('/js/index/add-article.js'))
+;
+$theme = $this->theme;
+
+?>
+
+
+
+<div id="home">
+   <div id="left_col">
+      <ul>
+         <li>
+            <a href="javascript:" class="active">
+               Добавить статью
+            </a>
+         </li>
+         <li>
+            <a href="<?=$this->url('articles', [])?>">
+               Все темы
+            </a>
+         </li>
+
+         <? $themes = [
+            $this->url('add-article') => 'Добавить статью',
+            $this->url('articles', []) => 'Все темы',
+         ];
+         foreach($this->themes as $i){
+            $link = $this->url('articles', ['theme' => $i['trans']]);
+            $themes[$link] = 'Статьи на тему: '.$i['title'];?>
+            <li>
+               <a href="<?=$link?>"><?=$i['title']?></a>
+            </li>
+         <? }?>
+      </ul>
+   </div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <div id="theme_select">
+         <? $select = new Select('article_theme');
+         $select->setValueOptions($themes);
+         $select->setValue($this->url('articles',
+            ['theme' => $theme['trans']]));
+         echo $this->formElement($select);
+         ?>
+      </div>
+
+      <h1>Здесь вы можете добавить статью на выбранную тему</h1>
+      <p>
+         Если в вашем портфолио педагога не хватает сертификата о публикации
+         статьи или вы просто хотите поделиться своей работой,
+         то опубликуйте ее здесь. Это совершенно бесплатно. После модерации
+         нашими специалистами ваша статья добавится на сайте, а вы получите
+         ссылку на сертификат, который можете распечатать на цветном принтере.
+         Вы также можете заказать сертификат на бумажном носителе.
+      </p>
+      <p>
+         Обратите внимание, данные (кроме e-mail автора и текста статьи),
+         указанные в форме, будут присутствовать в сертификате.
+      </p>
+      
+      <? $f = $this->form_article;?>
+      <?=$this->form()->openTag($f)?>
+      <? foreach($f as $el){
+         echo $this->formRow($el);
+         if($el->getName() == 'text'){?>
+<!--            <div class="clear"></div>-->
+<!--            <div id="orig-text">-->
+<!--               Мы вышлем Вам оригинал сертификата по почте.-->
+<!--               Организационный сбор увеличится на-->
+<!--               --><?//=Orders::ORIGINAL_PRICE?><!-- рублей.-->
+<!--            </div>-->
+            <div>
+               <p class="centre">Выберите бланк сертификата</p>
+               <? foreach($this->certificates as $certificate){?>
+                  <div class="blanks" data-id="<?=$certificate['id']?>">
+                     <img src="/images/certificates/<?=$certificate['thumb']?>" 
+                        alt="бланк диплома">
+                  </div>
+               <? }?>
+               <div class="clear"></div>
+            </div>
+            <div class="g-recaptcha"
+                 data-sitekey="<?=Recaptcha::KEY?>"></div>
+         <? }
+      }?>
+
+      <?=$this->form()->closeTag()?>
+   </div>
+</div>

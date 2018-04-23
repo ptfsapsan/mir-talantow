@@ -1,0 +1,37 @@
+<?
+$rp = $this->route_params;
+$page = $this->page;
+$pages = $this->pages;
+$page = $page < 1? 1: ($page > $pages? $pages: $page);
+if($on_page < 1){
+   $on_page = 1;
+}
+$begin = $page > 3? $page - 2: 1;
+$end = ($pages - $page) > 2? $page + 2: $pages;
+?>
+
+<div class="pagination">
+   <? if($begin != 1){
+      $rp['page'] = 1;?>
+      <a href="<?=$this->url(null, $rp, [], true)?>">1</a> ...
+   <? } ?>
+   <? foreach(range($begin, $end) as $i){
+      if($page != $i){
+         $rp['page'] = $i;?>
+         <a href="<?=$this->url(null, $rp, [], true)?>">
+            <?=$i?>
+         </a>
+      <? }
+      else{
+         ?>
+         <span><?=$i?></span>
+      <? } ?>
+   <? }
+   if($end != $pages){
+      $rp['page'] = $pages;
+      ?>
+      ... <a href="<?=$this->url(null, $rp, [], true)?>">
+         <?=$pages?>
+      </a>
+   <? } ?>
+</div>

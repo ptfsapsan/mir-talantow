@@ -1,0 +1,132 @@
+<?php
+use Application\Model\Orders;
+
+$this->headLink()
+   ->appendStylesheet($this->basePath('css/user/contest.css'))
+;
+$this->inlineScript()
+   ->appendFile($this->basePath('js/jquery.uploadifive.min.js'))
+   ->appendFile($this->basePath('js/user/contest.js'))
+;
+
+?>
+
+<div id="home">
+   <div id="left_col"></div>
+   <div id="right_col"></div>
+   <div id="wrap">
+      <h1>Здесь вы можете оставить заявку на участие в конкурсе для детей</h1>
+
+      <div id="order_form">
+         <?=$this->form()->openTag($this->form_order)?>
+         <div id="choose_kind">
+            <div id="slider">
+               <img id="slider_img" src="/images/slider_butt.png">
+            </div>
+            <div id="kind_titles">
+               <div class="kind_item" data-id="1">
+                  <span>Ежемесячный конкурс.</span>
+                  Работы принимаются в течение месяца.
+                  Результаты подводятся в течение 3 дней
+                  следующего месяца. Организационный сбор - <?=
+                  empty(Orders::MONTHLY_PRICE)? 'бесплатно':
+                     Orders::MONTHLY_PRICE.' рублей'?>.
+               </div>
+               <div class="kind_item" data-id="2">
+                  <span>Быстрый конкурс.</span>
+                  Результаты подводятся в течение 2 дней с момента
+                  принятия работы. Организационный сбор - <?=
+                  empty(Orders::FAST_PRICE)? 'бесплатно':
+                     Orders::FAST_PRICE.' рублей'?>.
+               </div>
+               <div class="kind_item" data-id="3">
+                  <span>Срочный конкурс.</span>
+                  Результаты подводятся в течение 2 часов с момента
+                  принятия работы. Организационный сбор - <?=
+                  empty(Orders::URGENT_PRICE)? 'бесплатно':
+                     Orders::URGENT_PRICE.' рублей'?>.
+               </div>
+            </div>
+         </div>
+
+         <p>
+            Заполните данные заявки.
+            Обязательные для заполнения поля: имя исполнителя,
+            адрес электронной почты, название работы и капча.
+            Если Вы хотите получить оригинал диплома по почте,
+            то поставьте соответствующую галочку.
+         </p>
+
+         <div class="div-bor">
+            <? $f = $this->form_order;
+            foreach($f as $el){
+               $type = $el->getAttribute('type');
+               if($type == 'hidden'){
+                  echo $this->formHidden($el);
+                  continue;
+               }
+               if(in_array($type, ['submit', 'checkbox'])){
+                  continue;
+               } ?>
+               <div class="f_label"><?=$el->getOption('label')?></div>
+               <div class="f_el"><?=$this->formElement($el)?></div>
+            <? }?>
+         </div>
+
+         <? // добавление файлов ?>
+         <div class="div-bor">
+            <p>
+               Загрузите файлы с Вашими работами. Можно загрузить файлы
+               картинок (png, jpg, gif, tiff), текстовые файлы (txt,
+               pdf), офисные (doc, docx, xls, xlsx, ppt, pptx), аудио
+               (mp3, mp4, mpeg, wma), видео (mp4, mpeg, wmv, fly, 3gpp),
+               архивы (zip, gzip). Максимальный размер файла - 8MB.
+            </p>
+            <div>
+               <div id="load_button"></div>
+               <div id="queue"></div>
+            </div>
+            <div id="files"></div>
+         </div>
+         <div class="div-bor">
+            <label>
+               <? $agree = $f->get('agree')?>
+               <?=$this->formElement($agree)?>
+               <span class="f_label"><?=$agree->getOption('label')?></span>
+            </label>
+         </div>
+
+         <? // добавление ссылок ?>
+         <div class="div-bor">
+            <p>
+               Если файл вашей работы очень большой, то загрузите его
+               на облачный ресурс, такой как
+               <a href="//disk.yandex.ru" target="_blank">Яндекс.Диск</a>
+               или <a href="//cloud.mail.ru" target="_blank">Mail.Ru</a>
+               и добавьте сюда ссылки на вашу работу с этого ресурса.
+            </p>
+            <div>
+               <input type="url" name="link[]" data-n="1">
+               <input type="button" class="button" value="+"
+                      id="add-link">
+            </div>
+         </div>
+
+         <? // выбор бланка диплома ?>
+         <div class="div-bor">
+            <p>Выберите бланк диплома.</p>
+            <? foreach($this->blanks as $blank){ ?>
+               <div class="blanks" data-id="<?=$blank['id']?>">
+                  <img src="/images/blanks/<?=$blank['thumb']?>"
+                       alt="бланк диплома">
+               </div>
+            <? } ?>
+            <div class="clear"></div>
+         </div>
+         <div>
+            <?=$this->formElement($f->get('submit'))?>
+         </div>
+         <?=$this->form()->closeTag()?>
+      </div>
+   </div>
+</div>

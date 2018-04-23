@@ -1,0 +1,61 @@
+<?
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
+
+
+echo $this->doctype(); ?>
+<html>
+<head>
+   <?=$this->headMeta()
+      ->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
+      ->appendName('keywords', '')
+      ->appendName('description', '')
+      ->setName('viewport',
+         'width=device-width,minimum-scale=1,initial-scale=1'
+      )
+   .
+   $this->headTitle('');
+   ?>
+
+   <!-- CSS -->
+   <?=$this->headLink()
+      ->appendStylesheet($this->basePath('/css/admin/style.css'));?>
+
+
+   <!-- Scripts -->
+   <?=$this->headScript()
+      ->prependFile($this->basePath('/js/admin/main.js'))
+      ->prependFile($this->basePath('/js/jquery-1.11.1.min.js'));?>
+
+
+
+
+</head>
+<body>
+
+   <div id="messages_fon">
+      <?
+      echo $this->flashMessenger()->render(
+         FlashMessenger::NAMESPACE_ERROR, ['alert', 'alert-danger']);
+      echo $this->flashMessenger()->render(
+         FlashMessenger::NAMESPACE_INFO, ['alert', 'alert-info']);
+      echo $this->flashMessenger()->render(
+         FlashMessenger::NAMESPACE_SUCCESS, ['alert', 'alert-success']);
+      echo $this->flashMessenger()->render(
+         FlashMessenger::NAMESPACE_WARNING, ['alert', 'alert-warning']);
+      echo $this->flashMessenger()->render(
+         FlashMessenger::NAMESPACE_DEFAULT, ['alert', 'alert-info']);
+      ?>
+      <img src="<?=$this->basePath('/images/close.png')?>" alt="">
+   </div>
+
+   <div id="wrap">
+      <div id="main-navigation">
+         <?=$this->navigation('navigation-admin')->menu()
+            ->setPartial('application/admin/menu')?>
+      </div>
+      <div id="content">
+         <?=$this->layout()->content?>
+      </div>
+   </div>
+</body>
+</html>
